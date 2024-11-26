@@ -16,32 +16,22 @@
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>60</y>
+     <x>130</x>
+     <y>100</y>
      <width>381</width>
-     <height>271</height>
+     <height>294</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
-    <item row="3" column="0">
-     <widget class="QLabel" name="dNILabel">
-      <property name="text">
-       <string>DNI:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="addDNI"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="addnombre"/>
-    </item>
     <item row="1" column="0">
      <widget class="QLabel" name="nombreLabel">
       <property name="text">
        <string>Nombre:</string>
       </property>
      </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="addnombre"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="emailLabel">
@@ -52,6 +42,16 @@
     </item>
     <item row="2" column="1">
      <widget class="QLineEdit" name="addemail"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="dNILabel">
+      <property name="text">
+       <string>DNI:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="addDNI"/>
     </item>
     <item row="4" column="0">
      <widget class="QLabel" name="titulaciNLabel">
@@ -71,7 +71,7 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QDateEdit" name="addnosexperiencia"/>
+     <widget class="QSpinBox" name="addanos"/>
     </item>
     <item row="6" column="0">
      <widget class="QLabel" name="tipoDeVALabel">
@@ -81,7 +81,23 @@
      </widget>
     </item>
     <item row="6" column="1">
-     <widget class="QLineEdit" name="addtipo_via"/>
+     <widget class="QComboBox" name="comboBox">
+      <item>
+       <property name="text">
+        <string>Calle</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Plaza</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Avenida</string>
+       </property>
+      </item>
+     </widget>
     </item>
     <item row="7" column="0">
      <widget class="QLabel" name="nombreDeVALabel">
@@ -103,7 +119,44 @@
     <item row="8" column="1">
      <widget class="QLineEdit" name="addcodigopostal"/>
     </item>
+    <item row="9" column="0">
+     <widget class="QLabel" name="localidadLabel">
+      <property name="text">
+       <string>Localidad</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QLineEdit" name="addlocalidad"/>
+    </item>
+    <item row="10" column="0">
+     <widget class="QLabel" name="provinciaLabel">
+      <property name="text">
+       <string>Provincia</string>
+      </property>
+     </widget>
+    </item>
+    <item row="10" column="1">
+     <widget class="QLineEdit" name="addprovincia"/>
+    </item>
    </layout>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>60</y>
+     <width>151</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 20px
+</string>
+   </property>
+   <property name="text">
+    <string>Formulario</string>
+   </property>
   </widget>
  </widget>
  <resources/>
