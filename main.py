@@ -105,11 +105,16 @@ def anadir_empleado():
     loadUi("formulario.ui", dialogo)
     dialogo.setWindowTitle("Añadir Empleado")
 
-    if dialogo.exec_() == QDialog.Accepted:
-        nombre = dialogo.inputNombre.text().strip()
-        puesto = dialogo.inputPuesto.text().strip()
+    dialogo.addenviar.clicked.connect(dialogo.accept)
 
-        if not nombre or not puesto:
+    if dialogo.exec_() == QDialog.Accepted:
+        nombre = dialogo.addnombre.text().strip()
+        email = dialogo.addemail.text().strip()
+        DNI = dialogo.addDNI.text().strip()
+        puesto = dialogo.addtitulacion.text().strip()
+        a_exp = dialogo.addanos.text().strip()
+
+        if not nombre or not email or not DNI or not puesto:
             QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
             return
 
@@ -120,9 +125,9 @@ def anadir_empleado():
         if conexion:
             cursor = conexion.cursor()
             try:
-
-                sql_insert = "INSERT INTO empleados (nombre, Titulación) VALUES (%s, %s)"
-                cursor.execute(sql_insert, (nombre, puesto))
+                sql_insert = ("INSERT INTO empleados (nombre, DNI, Email, Titulacion, anos_experiencia) "
+                              "VALUES (%s, %s, %s, %s, %s)")
+                cursor.execute(sql_insert, (nombre, DNI, email, puesto, a_exp))
                 conexion.commit()
                 print(f"Empleado '{nombre}' añadido correctamente.")
             except Exception as e:
@@ -131,6 +136,7 @@ def anadir_empleado():
             finally:
                 cursor.close()
                 conexion.close()
+
 
 
 def eliminar_empleado():
@@ -192,7 +198,7 @@ def editar_empleado():
                 if conexion:
                     cursor = conexion.cursor()
                     try:
-                        sql_update = "UPDATE empleados SET nombre = %s, Titulación = %s WHERE nombre = %s"
+                        sql_update = "UPDATE empleados SET nombre = %s, Titulacion = %s WHERE nombre = %s"
                         cursor.execute(sql_update, (nuevo_nombre, nuevo_puesto, nombre_anterior))
                         conexion.commit()
                         print(f"Empleado '{nombre_anterior}' actualizado a '{nuevo_nombre}' correctamente.")
