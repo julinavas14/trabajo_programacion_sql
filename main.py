@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
 from PyQt5.uic import loadUi
+from conexion import crear_conexion
 import qdarkstyle
 
 usuarios = {
@@ -56,6 +57,9 @@ def configurar_ventana_principal():
 
 def anadir_empleado():
     global main_window
+    insert = ""
+    conexion = crear_conexion()
+
 
     nombre, ok = QInputDialog.getText(main_window, "Añadir empleado", "Nombre:")
     if ok:
@@ -63,6 +67,19 @@ def anadir_empleado():
         if ok:
             empleados.append({"nombre": nombre, "puesto": puesto})
             main_window.listEmpleados.addItem(f"{nombre} - {puesto}")
+            if conexion:
+                cursor = conexion.cursor()
+
+                sql_insert = "INSERT INTO empleados(nombre, Titulación) VALUES (%s, %s)"
+                try:
+                    cursor.execute(sql_insert, (nombre, puesto))
+                except Exception as e:
+                    print(f"Error al insertar la fila: {e}")
+
+                conexion.commit()
+                print("Datos insertados correctamente.")
+                cursor.close()
+                conexion.close()
 
 
 def eliminar_empleado():
@@ -98,7 +115,7 @@ def abrir_ventana_principal():
     global main_window
 
     main_window = QMainWindow()
-    loadUi("main.ui", main_window)
+    loadUi("modified_main.ui", main_window)
 
     configurar_ventana_principal()
 
@@ -109,14 +126,13 @@ def abrir_ventana_principal():
     main_window.show()
 
 
-# Función principal para iniciar la aplicación
 def main():
     global app, login_window
 
     app = QApplication(sys.argv)
-
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     login_window = QDialog()
-    loadUi("untitled.ui", login_window)
+    loadUi("modified_untitled.ui", login_window)
 
     login_window.btnLogin.clicked.connect(iniciar_sesion)
 
