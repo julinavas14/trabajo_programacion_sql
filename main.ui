@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="listEmpleados">
     <property name="geometry">
@@ -39,6 +42,10 @@
         font-family: &quot;Arial&quot;;
         font-size: 14px;
         font-weight: bold; 
+}
+
+QPushButton: hover{
+		background-color: rgb(79, 116, 67)
 }</string>
     </property>
     <property name="text">
@@ -60,6 +67,10 @@
         font-family: &quot;Arial&quot;;
         font-size: 14px;
         font-weight: bold; 
+}
+
+QPushButton: hover{
+		background-color: rgb(79, 116, 67)
 }</string>
     </property>
     <property name="text">
@@ -81,23 +92,33 @@
         font-family: &quot;Arial&quot;;
         font-size: 14px;
         font-weight: bold; 
+}
+
+QPushButton: hover{
+		background-color: rgb(79, 116, 67)
 }</string>
     </property>
     <property name="text">
      <string>Editar</string>
     </property>
    </widget>
-   <widget class="QLabel" name="labelUsuario">
+   <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>70</y>
-      <width>301</width>
-      <height>20</height>
+      <x>280</x>
+      <y>100</y>
+      <width>121</width>
+      <height>31</height>
      </rect>
     </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>31</height>
+     </size>
+    </property>
     <property name="text">
-     <string/>
+     <string>Administración de datos</string>
     </property>
    </widget>
   </widget>
