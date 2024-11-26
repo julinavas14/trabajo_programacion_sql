@@ -17,8 +17,8 @@
    <widget class="QListWidget" name="listEmpleados">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>130</y>
+      <x>210</x>
+      <y>140</y>
       <width>256</width>
       <height>192</height>
      </rect>
@@ -27,11 +27,19 @@
    <widget class="QPushButton" name="btnAdd">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>360</y>
-      <width>75</width>
-      <height>23</height>
+      <x>170</x>
+      <y>340</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        background-color: rgb(129, 198, 129);
+        font-family: &quot;Arial&quot;;
+        font-size: 14px;
+        font-weight: bold; 
+}</string>
     </property>
     <property name="text">
      <string>Añadir</string>
@@ -40,11 +48,19 @@
    <widget class="QPushButton" name="btnDelete">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>370</y>
-      <width>75</width>
-      <height>23</height>
+      <x>290</x>
+      <y>340</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        background-color: rgb(129, 198, 129);
+        font-family: &quot;Arial&quot;;
+        font-size: 14px;
+        font-weight: bold; 
+}</string>
     </property>
     <property name="text">
      <string>Eliminar</string>
@@ -53,11 +69,19 @@
    <widget class="QPushButton" name="btnEdit">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>370</y>
-      <width>75</width>
-      <height>23</height>
+      <x>410</x>
+      <y>340</y>
+      <width>101</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+        background-color: rgb(129, 198, 129);
+        font-family: &quot;Arial&quot;;
+        font-size: 14px;
+        font-weight: bold; 
+}</string>
     </property>
     <property name="text">
      <string>Editar</string>
