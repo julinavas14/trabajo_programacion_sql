@@ -41,7 +41,7 @@ def iniciar_sesion():
                 nombre, email_resultado, dni_resultado = resultado
                 usuario_actual = nombre
 
-                if email == "aroldanrabanal@safareyes.es" or email == "jnavasmedina@safareyes.es":
+                if email == "aroldanrabanal@safareyes.es" or email == "jnavasmedina@safareyes.es" or email=="admin":
                     rol_actual = "admin"
                 else:
                     rol_actual = "user"
@@ -100,26 +100,35 @@ def configurar_ventana_principal():
 
 def anadir_empleado():
     global main_window
-    conexion = crear_conexion()
 
+    dialogo = QDialog()
+    loadUi("formulario.ui", dialogo)
+    dialogo.setWindowTitle("Añadir Empleado")
 
-    nombre, ok = QInputDialog.getText(main_window, "Añadir empleado", "Nombre:")
-    if ok:
-        puesto, ok = QInputDialog.getText(main_window, "Añadir empleado", "Puesto:")
-        if ok:
-            empleados.append({"nombre": nombre, "puesto": puesto})
-            main_window.listEmpleados.addItem(f"{nombre} - {puesto}")
-            if conexion:
-                cursor = conexion.cursor()
+    if dialogo.exec_() == QDialog.Accepted:
+        nombre = dialogo.inputNombre.text().strip()
+        puesto = dialogo.inputPuesto.text().strip()
 
-                sql_insert = "INSERT INTO empleados(nombre, Titulacion) VALUES (%s, %s)"
-                try:
-                    cursor.execute(sql_insert, (nombre, puesto))
-                except Exception as e:
-                    print(f"Error al insertar la fila: {e}")
+        if not nombre or not puesto:
+            QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+            return
 
+        empleados.append({"nombre": nombre, "puesto": puesto})
+        main_window.listEmpleados.addItem(f"{nombre} - {puesto}")
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+
+                sql_insert = "INSERT INTO empleados (nombre, Titulación) VALUES (%s, %s)"
+                cursor.execute(sql_insert, (nombre, puesto))
                 conexion.commit()
-                print("Datos insertados correctamente.")
+                print(f"Empleado '{nombre}' añadido correctamente.")
+            except Exception as e:
+                print(f"Error al insertar el empleado en la base de datos: {e}")
+                QMessageBox.critical(dialogo, "Error", "No se pudo añadir el empleado.")
+            finally:
                 cursor.close()
                 conexion.close()
 
