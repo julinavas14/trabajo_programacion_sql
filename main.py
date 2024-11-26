@@ -41,7 +41,7 @@ def iniciar_sesion():
                 nombre, email_resultado, dni_resultado = resultado
                 usuario_actual = nombre
 
-                if email == "aroldanrabanal@safareyes.es":
+                if email == "aroldanrabanal@safareyes.es" or email == "jnavasmedina@safareyes.es":
                     rol_actual = "admin"
                 else:
                     rol_actual = "user"
@@ -100,7 +100,6 @@ def configurar_ventana_principal():
 
 def anadir_empleado():
     global main_window
-    insert = ""
     conexion = crear_conexion()
 
 
@@ -165,6 +164,8 @@ def editar_empleado():
     current_item = main_window.listEmpleados.currentRow()
     if current_item >= 0:
         empleado = empleados[current_item]
+        nombre_anterior = empleado["nombre"]
+
         nuevo_nombre, ok = QInputDialog.getText(
             main_window, "Editar empleado", "Nombre:", text=empleado["nombre"]
         )
@@ -178,6 +179,19 @@ def editar_empleado():
                     f"{nuevo_nombre} - {nuevo_puesto}"
                 )
 
+                conexion = crear_conexion()
+                if conexion:
+                    cursor = conexion.cursor()
+                    try:
+                        sql_update = "UPDATE empleados SET nombre = %s, Titulación = %s WHERE nombre = %s"
+                        cursor.execute(sql_update, (nuevo_nombre, nuevo_puesto, nombre_anterior))
+                        conexion.commit()
+                        print(f"Empleado '{nombre_anterior}' actualizado a '{nuevo_nombre}' correctamente.")
+                    except Exception as e:
+                        print(f"Error al actualizar el empleado en la base de datos: {e}")
+                    finally:
+                        cursor.close()
+                        conexion.close()
 
 def abrir_ventana_principal():
     global main_window
