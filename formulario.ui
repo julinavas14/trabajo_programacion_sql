@@ -7,171 +7,309 @@
     <x>0</x>
     <y>0</y>
     <width>639</width>
-    <height>497</height>
+    <height>532</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#submitButton {
-    background-color: #007BFF;   /* Blue background for submit button */
-    border-color: #0056b3;
-    font-size: 16px;
-}
-</string>
+   <string notr="true">background-color: rgb(128, 211, 187);</string>
   </property>
-  <widget class="QWidget" name="formLayoutWidget">
+  <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>100</y>
-     <width>381</width>
-     <height>317</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout">
-    <item row="1" column="0">
-     <widget class="QLabel" name="nombreLabel">
-      <property name="text">
-       <string>Nombre:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="addnombre"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="emailLabel">
-      <property name="text">
-       <string>Email:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="addemail"/>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="dNILabel">
-      <property name="text">
-       <string>DNI:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="addDNI"/>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="titulaciNLabel">
-      <property name="text">
-       <string>Titulación</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="addtitulacion"/>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="aOsDeExperienciaLabel">
-      <property name="text">
-       <string>Años de experiencia</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
-     <widget class="QSpinBox" name="addanos"/>
-    </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="tipoDeVALabel">
-      <property name="text">
-       <string>Tipo de vía</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QComboBox" name="comboBox">
-      <item>
-       <property name="text">
-        <string>Calle</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Plaza</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Avenida</string>
-       </property>
-      </item>
-     </widget>
-    </item>
-    <item row="7" column="0">
-     <widget class="QLabel" name="nombreDeVALabel">
-      <property name="text">
-       <string>Nombre de vía</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QLineEdit" name="addnombrevia"/>
-    </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="cDigoPostalLabel">
-      <property name="text">
-       <string>Código Postal</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="1">
-     <widget class="QLineEdit" name="addcodigopostal"/>
-    </item>
-    <item row="9" column="0">
-     <widget class="QLabel" name="localidadLabel">
-      <property name="text">
-       <string>Localidad</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="1">
-     <widget class="QLineEdit" name="addlocalidad"/>
-    </item>
-    <item row="10" column="0">
-     <widget class="QLabel" name="provinciaLabel">
-      <property name="text">
-       <string>Provincia</string>
-      </property>
-     </widget>
-    </item>
-    <item row="10" column="1">
-     <widget class="QLineEdit" name="addprovincia"/>
-    </item>
-    <item row="11" column="1">
-     <widget class="QPushButton" name="addenviar">
-      <property name="text">
-       <string>Enviar</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>60</y>
-     <width>151</width>
-     <height>31</height>
+     <x>80</x>
+     <y>20</y>
+     <width>471</width>
+     <height>491</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 20px
+    <string notr="true">QWidget{
+background-color: rgb(186, 253, 194);
+border-radius: 15px;
+}
+
+QLabel {
+    font-size: 14px;
+    color: black;
+    padding: 2px 4px;
+    border: none;
+}
+
+QLineEdit, QComboBox, QSpinBox {
+    font-size: 14px;
+    color: #34495e;
+    border: 2px solid;
+	border-color: white;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: transparent;
+}
+
+QPushButton {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+	background-color: rgb(229, 243, 186);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+}
+
+QPushButton:hover {
+    background-color: rgb(202, 213, 163)
+}
+
+QPushButton:disabled {
+    background-color: #95a5a6;
+    color: #ecf0f1;
+}
+
 </string>
    </property>
-   <property name="text">
-    <string>Formulario</string>
+   <widget class="QWidget" name="formLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>321</width>
+      <height>407</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="1" column="0">
+      <widget class="QLabel" name="nombreLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Nombre:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="addnombre">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="emailLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Email:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="addemail">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="dNILabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>DNI:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="addDNI">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="titulaciNLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Titulación:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="addtitulacion">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="aOsDeExperienciaLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Años de experiencia:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="addanos">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="tipoDeVALabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Tipo de vía:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Calle</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Plaza</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Avenida</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="nombreDeVALabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Nombre de vía:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="addnombrevia">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="cDigoPostalLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Código Postal:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="addcodigopostal">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QLabel" name="localidadLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Localidad:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLineEdit" name="addlocalidad">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="0">
+      <widget class="QLabel" name="provinciaLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Provincia:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLineEdit" name="addprovincia">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="11" column="0" colspan="2">
+      <widget class="QPushButton" name="addenviar">
+       <property name="text">
+        <string>Aceptar y registrarse</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>10</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(159, 216, 166);
+border-radius: 15px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>0</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-size: 20px;
+font-weight: bold;</string>
+    </property>
+    <property name="text">
+     <string>Agregar usuario</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
