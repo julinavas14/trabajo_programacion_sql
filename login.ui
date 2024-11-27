@@ -15,94 +15,79 @@
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #3a352f;
-font-family: &quot;Montserrat&quot;;
 color: white;
-font-size: 15px;</string>
+font-size: 15px;
+</string>
   </property>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>110</y>
-     <width>321</width>
-     <height>281</height>
+     <x>220</x>
+     <y>140</y>
+     <width>171</width>
+     <height>191</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout_2">
     <item row="0" column="0">
      <widget class="QLabel" name="usuarioLabel">
       <property name="styleSheet">
-       <string notr="true">font: 15px</string>
+       <string notr="true"> background-color: transparent;
+font: 15px;
+color: black;
+ font-weight: bold;</string>
       </property>
       <property name="text">
        <string>Usuario:</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="inputUsuario">
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <widget class="QLabel" name="contraseALabel">
       <property name="styleSheet">
-       <string notr="true">font: 15px</string>
+       <string notr="true">font: 15px;
+background-color: transparent;
+color: black;
+ font-weight: bold;</string>
       </property>
       <property name="text">
        <string>Contraseña:</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
+    <item row="3" column="0">
+     <widget class="QLineEdit" name="inputUsuario">
+      <property name="styleSheet">
+       <string notr="true"> background-color: transparent;</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
      <widget class="QLineEdit" name="inputContrasena">
+      <property name="styleSheet">
+       <string notr="true"> background-color: transparent;</string>
+      </property>
       <property name="text">
        <string/>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="6" column="0" colspan="2">
      <widget class="QPushButton" name="btnLogin">
       <property name="styleSheet">
-       <string notr="true">margin-top: 30px;
-margin-right: 60px;
-padding: 5px;
+       <string notr="true">margin-top:15px;
+padding: 10px;
 item-align: center;
-background-color: rgb(92, 73, 61);</string>
+background-color: rgb(92, 73, 61);
+font-size: 20px;
+</string>
       </property>
       <property name="text">
-       <string>Aceptar</string>
+       <string>Login</string>
       </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QLabel" name="label">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>60</y>
-     <width>171</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>171</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="toolTip">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Iniciar Sesión&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">text-align: center;</string>
-   </property>
-   <property name="text">
-    <string>Iniciar Sesión</string>
-   </property>
   </widget>
   <widget class="QLabel" name="labelError">
    <property name="geometry">
@@ -117,9 +102,57 @@ background-color: rgb(92, 73, 61);</string>
     <string/>
    </property>
   </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>90</y>
+     <width>301</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius:15px;
+background-color: rgb(203, 214, 164);</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>60</y>
+     <width>81</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(229, 243, 186);
+border-radius: 15px;</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>imagenes/bloqueo-de-usuario.png</normaloff>imagenes/bloqueo-de-usuario.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>50</width>
+     <height>50</height>
+    </size>
+   </property>
+  </widget>
+  <zorder>frame</zorder>
   <zorder>formLayoutWidget</zorder>
   <zorder>labelError</zorder>
-  <zorder>label</zorder>
+  <zorder>pushButton</zorder>
  </widget>
  <resources/>
  <connections/>
