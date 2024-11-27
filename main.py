@@ -79,7 +79,7 @@ def configurar_ventana_principal():
 
             main_window.listEmpleados.clear()
             for empleado in empleados:
-                main_window.listEmpleados.addItem(f"{empleado['nombre']} - {empleado['puesto']}")
+                main_window.listEmpleados.addItem(f"{empleado['nombre']} - {empleado['puesto']} - {empleado['DNI']}")
 
             print("Empleados cargados correctamente desde la base de datos.")
         except Exception as e:
@@ -235,7 +235,46 @@ def editar_empleado():
                 cursor.close()
                 conexion.close()
 
+def anadir_telf():
+    global main_window
 
+    current_item = main_window.listEmpleados.currentRow()
+    if current_item >= 0:
+        empleado = empleados[current_item]
+        dni = empleado["DNI"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select_id = "SELECT ID FROM empleados WHERE DNI = %s"
+                cursor.execute(sql_select_id, (dni,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontró el empleado en la base de datos.")
+                    return
+
+                id_empleado = resultado[0]
+
+                telefono, ok = QInputDialog.getText(main_window, "Añadir Teléfono", "Introduce el teléfono (9 dígitos):")
+                if not ok or not telefono.isdigit() or len(telefono) != 9:
+                    QMessageBox.warning(main_window, "Error", "Teléfono inválido. Debe ser un número de 9 dígitos.")
+                    return
+
+                sql_insert_telf = "INSERT INTO telf_empleados (id_empleado, telf) VALUES (%s, %s)"
+                cursor.execute(sql_insert_telf, (id_empleado, telefono))
+                conexion.commit()
+                print(f"Teléfono {telefono} añadido correctamente para el empleado con ID {id_empleado}.")
+                QMessageBox.information(main_window, "Éxito", f"Teléfono {telefono} añadido correctamente.")
+            except Exception as e:
+                print(f"Error al añadir el teléfono: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo añadir el teléfono.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
 def abrir_ventana_principal():
     global main_window
@@ -248,6 +287,7 @@ def abrir_ventana_principal():
     main_window.btnAdd.clicked.connect(anadir_empleado)
     main_window.btnDelete.clicked.connect(eliminar_empleado)
     main_window.btnEdit.clicked.connect(editar_empleado)
+    main_window.btntlf.clicked.connect(anadir_telf)
 
     main_window.show()
 
@@ -256,7 +296,7 @@ def main():
     global app, login_window
 
     app = QApplication(sys.argv)
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    #app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     login_window = QDialog()
     loadUi("untitled.ui", login_window)
 
