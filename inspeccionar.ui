@@ -6,106 +6,216 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>669</width>
-    <height>504</height>
+    <width>700</width>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="labelusu2">
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(58, 53, 47);</string>
+  </property>
+  <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>40</y>
-     <width>411</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">font-size: 18px;</string>
-   </property>
-   <property name="text">
-    <string>Usuario seleccionado - </string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="gridLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
+     <x>90</x>
      <y>140</y>
      <width>541</width>
      <height>291</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridins">
-    <item row="1" column="0">
-     <widget class="QLabel" name="LEmail">
-      <property name="text">
-       <string>Email:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="LNombre">
-      <property name="text">
-       <string>Nombre:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="LDNI">
-      <property name="text">
-       <string>DNI:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="LExp">
-      <property name="text">
-       <string>Años de experiencia:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLabel" name="LTV">
-      <property name="text">
-       <string>Tipo vía:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLabel" name="LTitu">
-      <property name="text">
-       <string>Titulación:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="LProvicia">
-      <property name="text">
-       <string>Provincia:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="LCP">
-      <property name="text">
-       <string>Codigo Postal:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" colspan="2">
-     <widget class="QListView" name="listTelefonos">
-      <property name="maximumSize">
-       <size>
-        <width>600</width>
-        <height>100</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="styleSheet">
+    <string notr="true">background-color: #5c493d;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>541</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridins">
+     <item row="0" column="0">
+      <widget class="QLabel" name="LNombre">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Nombre:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="LEmail">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Email:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="LDNI">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>DNI:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="LExp">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Años de experiencia:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="LTV">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Tipo vía:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="LTitu">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Titulación:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="LProvicia">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Provincia:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="LCP">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Codigo Postal:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="0">
+      <widget class="QListWidget" name="listTelefonos">
+       <property name="maximumSize">
+        <size>
+         <width>275</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>20</y>
+     <width>381</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid rgb(115, 189, 167);
+background-color: rgb(128, 211, 187);
+border-radius: 10px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="labelusu2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>341</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-size: 18px;
+border-color: transparent;</string>
+    </property>
+    <property name="text">
+     <string>Usuario seleccionado - </string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="btnEditTelf">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>440</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(229, 243, 186);</string>
+   </property>
+   <property name="text">
+    <string>Editar TLF</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnDeleteTelf">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>440</y>
+     <width>91</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(229, 243, 186);</string>
+   </property>
+   <property name="text">
+    <string>Borrar TLF</string>
+   </property>
   </widget>
  </widget>
  <resources/>
