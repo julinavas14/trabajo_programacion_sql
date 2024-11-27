@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>883</width>
+    <width>913</width>
     <height>646</height>
    </rect>
   </property>
@@ -14,7 +14,10 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(255, 255, 255)</string>
+   <string notr="true"/>
+  </property>
+  <property name="labelUsuario" stdset="0">
+   <string/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="listEmpleados">
@@ -53,8 +56,8 @@ font-family: 'Open Sans', Arial, sans-serif;</string>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>40</x>
+      <y>500</y>
       <width>861</width>
       <height>121</height>
      </rect>
@@ -310,7 +313,7 @@ QPushButton: hover{
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>883</width>
+     <width>913</width>
      <height>21</height>
     </rect>
    </property>
