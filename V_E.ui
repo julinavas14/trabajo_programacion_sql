@@ -96,7 +96,7 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">background-color: rgb(192, 203, 155);</string>
      </property>
      <property name="text">
       <string>Empleados</string>
@@ -267,7 +267,17 @@ QPushButton:pressed {
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Eliminar</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>imagenes/borrar-usuario.png</normaloff>imagenes/borrar-usuario.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="btnEdit">
@@ -283,7 +293,17 @@ QPushButton:pressed {
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Editar</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>imagenes/lapiz-de-usuario.png</normaloff>imagenes/lapiz-de-usuario.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="btntlf">
@@ -296,7 +316,17 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="text">
-      <string> 📞      Añadir TLF</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>imagenes/telefono-mas.png</normaloff>imagenes/telefono-mas.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="btninspect">
@@ -309,7 +339,17 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="text">
-      <string>Inspeccionar</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>imagenes/descubrir.png</normaloff>imagenes/descubrir.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
      </property>
     </widget>
    </widget>
@@ -342,6 +382,10 @@ QPushButton:pressed {
         <width>471</width>
         <height>311</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: white;
+background-color: rgb(92, 73, 61);</string>
       </property>
      </widget>
     </widget>

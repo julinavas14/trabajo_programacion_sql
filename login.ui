@@ -13,11 +13,17 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #3a352f;
+font-family: &quot;Montserrat&quot;;
+color: white;
+font-size: 15px;</string>
+  </property>
   <widget class="QWidget" name="formLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>120</y>
+     <x>140</x>
+     <y>110</y>
      <width>321</width>
      <height>281</height>
     </rect>
@@ -34,7 +40,11 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="inputUsuario"/>
+     <widget class="QLineEdit" name="inputUsuario">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
     </item>
     <item row="3" column="0">
      <widget class="QLabel" name="contraseALabel">
@@ -56,7 +66,11 @@
     <item row="4" column="1">
      <widget class="QPushButton" name="btnLogin">
       <property name="styleSheet">
-       <string notr="true">item-align: center;</string>
+       <string notr="true">margin-top: 30px;
+margin-right: 60px;
+padding: 5px;
+item-align: center;
+background-color: rgb(92, 73, 61);</string>
       </property>
       <property name="text">
        <string>Aceptar</string>
@@ -68,8 +82,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>70</y>
+     <x>240</x>
+     <y>60</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -84,7 +98,7 @@
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Iniciar Sesión&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 15px</string>
+    <string notr="true">text-align: center;</string>
    </property>
    <property name="text">
     <string>Iniciar Sesión</string>
