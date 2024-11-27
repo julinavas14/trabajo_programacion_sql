@@ -276,6 +276,56 @@ def anadir_telf():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def inspeccionar_empleado():
+    global main_window
+
+    current_item = main_window.listEmpleados.currentRow()
+    if current_item >= 0:
+        empleado = empleados[current_item]
+        dni = empleado["DNI"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = "SELECT nombre, DNI, Email, Titulacion FROM empleados WHERE DNI = %s"
+                cursor.execute(sql_select, (dni,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
+                    return
+
+                nombre, dni, email, titulacion = resultado
+
+                sql_select_telf = "SELECT telf FROM telf_empleados WHERE id_empleado = (SELECT ID FROM empleados WHERE DNI = %s)"
+                cursor.execute(sql_select_telf, (dni,))
+                telefonos = cursor.fetchall()
+
+                dialogo = QDialog()
+                loadUi("inspeccionar.ui", dialogo)
+                dialogo.setWindowTitle("Inspeccionar Empleado")
+
+                dialogo.LNombre.setText(nombre)
+                dialogo.LDNI.setText(dni)
+                dialogo.LEmail.setText(email)
+                dialogo.LTitu.setText(titulacion)
+
+                dialogo.listTelefonos.addItem("Telefonos:")
+                for telf in telefonos:
+                    dialogo.listTelefonos.addItem(telf[0])
+
+                dialogo.exec_()
+
+            except Exception as e:
+                print(f"Error al obtener los datos del empleado: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo obtener los datos del empleado.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+
 def abrir_ventana_principal():
     global main_window
 
@@ -288,6 +338,7 @@ def abrir_ventana_principal():
     main_window.btnDelete.clicked.connect(eliminar_empleado)
     main_window.btnEdit.clicked.connect(editar_empleado)
     main_window.btntlf.clicked.connect(anadir_telf)
+    main_window.btninspect.clicked.connect(inspeccionar_empleado)
 
     main_window.show()
 
