@@ -27,14 +27,38 @@ create or replace table telf_empleados(
         on delete cascade on update cascade
 );
 
-create or replace table gastos(
-	id int auto_increment primary key,
-	descp varchar(255),
-	fecha date,
-	importe decimal(10, 2),
-	tipo varchar(50),
-	id_empleado int,
-	constraint fk_g_e foreign key (id_empleado)
-		references empleados(id)
-		on delete cascade on update cascade
+CREATE OR REPLACE TABLE prototipos(
+	id INT AUTO_INCREMENT,
+	id_proto_rel INT,
+	Nombre VARCHAR(20)unique,
+	Descripción VARCHAR(200),
+	Fecha_inicio DATE,
+	Fecha_fin DATE,
+	Presupuesto FLOAT(10,2) UNSIGNED,
+	Horas_est INT(6),
+	PRIMARY KEY(id),
+	CONSTRAINT rel FOREIGN KEY(id_proto_rel)
+		REFERENCES prototipos(id)
+		ON DELETE set null,
+		-- Si se borra un proyecto no desaparecen sus relacionados
+	CONSTRAINT fecha CHECK (Fecha_fin > Fecha_inicio),
+	CONSTRAINT max_horas CHECK (Horas_est >= 30)
+);
+
+CREATE OR REPLACE TABLE gastos(
+	id INT AUTO_INCREMENT,
+	id_emp INT,
+	id_proto INT,
+	Descripcion VARCHAR(200),
+	Fecha DATE,
+	Importe FLOAT(7,2) UNSIGNED,
+	Tipo VARCHAR(20),
+	PRIMARY KEY(id),
+	CONSTRAINT FKemp FOREIGN KEY(id_emp)
+		REFERENCES empleados(id)
+		ON DELETE cascade,
+	CONSTRAINT FKproto FOREIGN KEY(id_proto)
+		REFERENCES prototipos(id)
+		ON DELETE CASCADE,
+	CONSTRAINT lim_gasto CHECK (Importe <= 20000)
 );
