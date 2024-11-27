@@ -71,7 +71,8 @@ border-radius: 15px;</string>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(205, 217, 166);
 border: 2px solid;
-border-radius: 15px;</string>
+border-radius: 15px;
+border-color: transparent;</string>
    </property>
    <widget class="QWidget" name="formLayoutWidget">
     <property name="geometry">
