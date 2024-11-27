@@ -26,3 +26,15 @@ create or replace table telf_empleados(
         references empleados(ID)
         on delete cascade on update cascade
 );
+
+create or replace table gastos(
+	id int auto_increment primary key,
+	descp varchar(255),
+	fecha date,
+	importe decimal(10, 2),
+	tipo varchar(50),
+	id_empleado int,
+	constraint fk_g_e foreign key (id_empleado)
+		references empleados(id)
+		on delete cascade on update cascade
+);
