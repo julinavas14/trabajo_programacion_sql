@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color: rgb(58, 53, 47);</string>
   </property>
   <property name="labelUsuario" stdset="0">
    <string/>
@@ -37,7 +37,8 @@
     </property>
     <property name="styleSheet">
      <string notr="true">font: 15px;
-font-family: 'Open Sans', Arial, sans-serif;</string>
+font-family: 'Open Sans', Arial, sans-serif;
+color: white</string>
     </property>
     <property name="text">
      <string>Administración de datos</string>
@@ -54,14 +55,13 @@ font-family: 'Open Sans', Arial, sans-serif;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">QFrame{
-background-color: rgb(0, 0, 0);
+background-color: rgb(92, 73, 61);
 border-radius: 10px;
 }
 
 QPushButton {
-    background-color: #007BFF;
-    color: white;
-    border: 2px solid #0056b3;
+    background-color: #e5f3ba;
+    border: 2px solid rgb(192, 203, 155);
     border-radius: 12px;
     padding: 12px 20px;
     font-family: 'Open Sans', Arial, sans-serif;
@@ -71,12 +71,10 @@ QPushButton {
     text-transform: uppercase;
 }
 QPushButton:hover {
-    background-color: #0056b3;
-    border-color: #003f7f;
+    background-color:  rgb(192, 203, 155);
 }
 QPushButton:pressed {
-    background-color: #003f7f;
-    border-color: #002952;
+    background-color: #e5f3ba;
 }
 
 
@@ -91,112 +89,81 @@ QPushButton:pressed {
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>20</x>
        <y>20</y>
        <width>151</width>
        <height>71</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(0, 76, 255);</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>Empleados</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>780</x>
-       <y>30</y>
-       <width>61</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../Downloads/icone-x-noir.png</normaloff>../Downloads/icone-x-noir.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>100</width>
-       <height>40</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>700</x>
-       <y>30</y>
-       <width>61</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../Downloads/159699.png</normaloff>../Downloads/159699.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>100</width>
-       <height>50</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="geometry">
-      <rect>
-       <x>620</x>
-       <y>30</y>
-       <width>61</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../Downloads/icone-trait-noir.png</normaloff>../Downloads/icone-trait-noir.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>100</width>
-       <height>50</height>
-      </size>
-     </property>
-    </widget>
     <widget class="QPushButton" name="addbasededatos">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>40</y>
-       <width>181</width>
-       <height>51</height>
+       <x>190</x>
+       <y>20</y>
+       <width>141</width>
+       <height>71</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="text">
-      <string>Base de datos</string>
+      <string>Gastos</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="addajustes">
+    <widget class="QPushButton" name="addbasededatos_2">
      <property name="geometry">
       <rect>
-       <x>390</x>
-       <y>40</y>
-       <width>151</width>
-       <height>51</height>
+       <x>350</x>
+       <y>20</y>
+       <width>161</width>
+       <height>71</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="text">
-      <string>⚙️ Ajustes</string>
+      <string>Prototipos</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="addbasededatos_3">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>20</y>
+       <width>131</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Etapas</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="addbasededatos_4">
+     <property name="geometry">
+      <rect>
+       <x>680</x>
+       <y>20</y>
+       <width>161</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Recursos</string>
      </property>
     </widget>
    </widget>
@@ -211,7 +178,8 @@ QPushButton:pressed {
     </property>
     <property name="styleSheet">
      <string notr="true">font: 15px;
-font-family: 'Open Sans', Arial, sans-serif;</string>
+font-family: 'Open Sans', Arial, sans-serif;
+color: white</string>
     </property>
     <property name="text">
      <string>Bienvenido,</string>
@@ -221,30 +189,29 @@ font-family: 'Open Sans', Arial, sans-serif;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>160</y>
       <width>321</width>
       <height>461</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">QFrame{
-background-color: rgb(0, 0, 0);
+background-color: #80d3bb;
 border-radius: 10px;
 }
 
 QPushButton {
-        background-color: rgb(129, 198, 129);
+        background-color: #bafdc2;
         font-family: &quot;Arial&quot;;
         font-size: 14px;
         font-weight: bold; 
 		border-radius: 20px;
-		 border: 2px solid rgb(0, 170, 0);
+		 border: 2px solid rgb(157, 213, 164);
 
 }
 
 QPushButton:hover {
-    background-color: rgb(0, 166, 0);
-    border-color: rgb(0, 112, 0);
+    background-color: rgb(157, 213, 164);
 }
 QPushButton:pressed {
     background-color: rgb(0, 95, 0);
@@ -267,11 +234,24 @@ QPushButton:pressed {
        <height>61</height>
       </rect>
      </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
       <string notr="true"/>
      </property>
      <property name="text">
-      <string>Añadir</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>imagenes/agregar-usuario (1).png</normaloff>imagenes/agregar-usuario (1).png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="btnDelete">
@@ -316,7 +296,7 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="text">
-      <string>Añadir TLF</string>
+      <string> 📞      Añadir TLF</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btninspect">
@@ -367,17 +347,6 @@ QPushButton:pressed {
     </widget>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>880</width>
-     <height>21</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
