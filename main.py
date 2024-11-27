@@ -296,7 +296,7 @@ def main():
     global app, login_window
 
     app = QApplication(sys.argv)
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    #app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     login_window = QDialog()
     loadUi("untitled.ui", login_window)
 
