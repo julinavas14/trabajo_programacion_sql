@@ -119,8 +119,8 @@ def anadir_empleado():
             QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
             return
 
-        empleados.append({"nombre": nombre, "puesto": puesto})
-        main_window.listEmpleados.addItem(f"{nombre} - {puesto}")
+        empleados.append({"nombre": nombre, "puesto": puesto, "DNI": DNI})
+        main_window.listEmpleados.addItem(f"{nombre} - {puesto} - {DNI}")
 
         conexion = crear_conexion()
         if conexion:
@@ -221,8 +221,8 @@ def editar_empleado():
                         QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
                         return
 
-                    empleados[current_item] = {"nombre": nuevo_nombre, "puesto": nueva_titulacion}
-                    main_window.listEmpleados.item(current_item).setText(f"{nuevo_nombre} - {nueva_titulacion}")
+                    empleados[current_item] = {"nombre": nuevo_nombre, "puesto": nueva_titulacion, "DNI": nuevo_DNI}
+                    main_window.listEmpleados.item(current_item).setText(f"{nuevo_nombre} - {nueva_titulacion} - {nuevo_DNI}")
 
                     sql_update = "UPDATE empleados SET nombre = %s, Email = %s, DNI = %s, Titulacion = %s, anos_experiencia = %s WHERE DNI = %s"
                     cursor.execute(sql_update, (nuevo_nombre, nuevo_email, nuevo_DNI, nueva_titulacion, nuevos_anos_experiencia, dni))
@@ -280,7 +280,7 @@ def abrir_ventana_principal():
     global main_window
 
     main_window = QMainWindow()
-    loadUi("main.ui", main_window)
+    loadUi("V_E.ui", main_window)
 
     configurar_ventana_principal()
 
@@ -298,7 +298,7 @@ def main():
     app = QApplication(sys.argv)
     #app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     login_window = QDialog()
-    loadUi("untitled.ui", login_window)
+    loadUi("login.ui", login_window)
 
     login_window.btnLogin.clicked.connect(iniciar_sesion)
 
