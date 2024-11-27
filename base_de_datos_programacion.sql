@@ -17,3 +17,12 @@ create or replace table empleados(
 	Localidad varchar (50),
 	Provincia varchar (50)
 );
+
+create or replace table telf_empleados(
+    id_empleado int,
+    telf char(9),
+    primary key(id_emlpeado, telf),
+    foreign key id_emlpeado
+        references empleados(ID)
+        on delete cascade on update cascade
+);

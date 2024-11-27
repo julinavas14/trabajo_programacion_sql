@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
+
 from conexion import crear_conexion
 import qdarkstyle
 
@@ -11,8 +12,8 @@ usuarios = {
 }
 
 empleados = [
-    {"nombre": "Juan Pérez", "puesto": "Desarrollador"},
-    {"nombre": "Ana López", "puesto": "Diseñadora"},
+    {"nombre": "Juan Pérez", "puesto": "Desarrollador", "DNI": "111111"},
+    {"nombre": "Ana López", "puesto": "Diseñadora", "DNI": "222222"},
 ]
 
 app = None
@@ -71,10 +72,10 @@ def configurar_ventana_principal():
         cursor = conexion.cursor()
         try:
 
-            cursor.execute("SELECT nombre, Titulacion FROM empleados")
+            cursor.execute("SELECT nombre, Titulacion, DNI FROM empleados")
             resultados = cursor.fetchall()
 
-            empleados = [{"nombre": fila[0], "puesto": fila[1]} for fila in resultados]
+            empleados = [{"nombre": fila[0], "puesto": fila[1], "DNI": fila[2]} for fila in resultados]
 
             main_window.listEmpleados.clear()
             for empleado in empleados:
@@ -147,6 +148,7 @@ def eliminar_empleado():
     if current_item >= 0:
         empleado = empleados[current_item]
         nombre_empleado = empleado["nombre"]
+        dni = empleado["DNI"]
 
         respuesta = QMessageBox.question(
             main_window,
@@ -163,8 +165,8 @@ def eliminar_empleado():
             if conexion:
                 cursor = conexion.cursor()
                 try:
-                    sql_delete = "DELETE FROM empleados WHERE nombre = %s"
-                    cursor.execute(sql_delete, (nombre_empleado,))
+                    sql_delete = "DELETE FROM empleados WHERE DNI = %s"
+                    cursor.execute(sql_delete, (dni,))
                     conexion.commit()
                     print(f"Empleado '{nombre_empleado}' eliminado correctamente de la base de datos.")
                 except Exception as e:
@@ -180,33 +182,60 @@ def editar_empleado():
     if current_item >= 0:
         empleado = empleados[current_item]
         nombre_anterior = empleado["nombre"]
+        dni = empleado["DNI"].strip()
 
-        nuevo_nombre, ok = QInputDialog.getText(
-            main_window, "Editar empleado", "Nombre:", text=empleado["nombre"]
-        )
-        if ok:
-            nuevo_puesto, ok = QInputDialog.getText(
-                main_window, "Editar empleado", "Puesto:", text=empleado["puesto"]
-            )
-            if ok:
-                empleados[current_item] = {"nombre": nuevo_nombre, "puesto": nuevo_puesto}
-                main_window.listEmpleados.item(current_item).setText(
-                    f"{nuevo_nombre} - {nuevo_puesto}"
-                )
+        #print(f"DNI seleccionado: {dni}")
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = "SELECT nombre, DNI, Email, Titulacion, anos_experiencia FROM empleados WHERE DNI = %s"
+                cursor.execute(sql_select, (dni,))
+                resultado = cursor.fetchone()
 
-                conexion = crear_conexion()
-                if conexion:
-                    cursor = conexion.cursor()
-                    try:
-                        sql_update = "UPDATE empleados SET nombre = %s, Titulacion = %s WHERE nombre = %s"
-                        cursor.execute(sql_update, (nuevo_nombre, nuevo_puesto, nombre_anterior))
-                        conexion.commit()
-                        print(f"Empleado '{nombre_anterior}' actualizado a '{nuevo_nombre}' correctamente.")
-                    except Exception as e:
-                        print(f"Error al actualizar el empleado en la base de datos: {e}")
-                    finally:
-                        cursor.close()
-                        conexion.close()
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
+                    return
+
+                nombre, DNI, email, titulacion, anos_experiencia = resultado
+
+                dialogo = QDialog()
+                loadUi("formulario.ui", dialogo)
+                dialogo.setWindowTitle("Editar Empleado")
+
+                dialogo.addnombre.setText(nombre)
+                dialogo.addemail.setText(email)
+                dialogo.addDNI.setText(DNI)
+                dialogo.addtitulacion.setText(titulacion)
+                dialogo.addanos.setValue(int(anos_experiencia))
+                dialogo.addenviar.clicked.connect(dialogo.accept)
+
+                if dialogo.exec_() == QDialog.Accepted:
+                    nuevo_nombre = dialogo.addnombre.text().strip()
+                    nuevo_email = dialogo.addemail.text().strip()
+                    nuevo_DNI = dialogo.addDNI.text().strip()
+                    nueva_titulacion = dialogo.addtitulacion.text().strip()
+                    nuevos_anos_experiencia = dialogo.addanos.text().strip()
+
+                    if not nuevo_nombre or not nuevo_email or not nuevo_DNI or not nueva_titulacion or not nuevos_anos_experiencia:
+                        QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+                        return
+
+                    empleados[current_item] = {"nombre": nuevo_nombre, "puesto": nueva_titulacion}
+                    main_window.listEmpleados.item(current_item).setText(f"{nuevo_nombre} - {nueva_titulacion}")
+
+                    sql_update = "UPDATE empleados SET nombre = %s, Email = %s, DNI = %s, Titulacion = %s, anos_experiencia = %s WHERE DNI = %s"
+                    cursor.execute(sql_update, (nuevo_nombre, nuevo_email, nuevo_DNI, nueva_titulacion, nuevos_anos_experiencia, dni))
+                    conexion.commit()
+                    print(f"Empleado '{nombre_anterior}' actualizado a '{nuevo_nombre}' correctamente.")
+            except Exception as e:
+                print(f"Error al obtener o actualizar los datos del empleado: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo editar el empleado.")
+            finally:
+                cursor.close()
+                conexion.close()
+
+
 
 def abrir_ventana_principal():
     global main_window
