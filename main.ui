@@ -306,7 +306,7 @@ QPushButton:pressed {
       <string>Editar</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
+    <widget class="QPushButton" name="btntlf">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -319,7 +319,7 @@ QPushButton:pressed {
       <string>Añadir TLF</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="btninspect">
      <property name="geometry">
       <rect>
        <x>50</x>
