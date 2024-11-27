@@ -118,7 +118,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Downloads/icone-x-noir.png</normaloff>../../Downloads/icone-x-noir.png</iconset>
+       <normaloff>../Downloads/icone-x-noir.png</normaloff>../Downloads/icone-x-noir.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -141,7 +141,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Downloads/159699.png</normaloff>../../Downloads/159699.png</iconset>
+       <normaloff>../Downloads/159699.png</normaloff>../Downloads/159699.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -164,7 +164,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../../Downloads/icone-trait-noir.png</normaloff>../../Downloads/icone-trait-noir.png</iconset>
+       <normaloff>../Downloads/icone-trait-noir.png</normaloff>../Downloads/icone-trait-noir.png</iconset>
      </property>
      <property name="iconSize">
       <size>
