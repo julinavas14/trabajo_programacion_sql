@@ -64,7 +64,7 @@ def iniciar_sesion():
 def configurar_ventana_principal():
     global main_window, rol_actual, empleados
 
-    main_window.labelUsuario.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
 
     empleados = []
     conexion = crear_conexion()
