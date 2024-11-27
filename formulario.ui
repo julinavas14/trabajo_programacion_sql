@@ -19,7 +19,7 @@
      <x>130</x>
      <y>100</y>
      <width>381</width>
-     <height>294</height>
+     <height>317</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -53,34 +53,34 @@
     <item row="3" column="1">
      <widget class="QLineEdit" name="addDNI"/>
     </item>
-    <item row="4" column="0">
+    <item row="5" column="0">
      <widget class="QLabel" name="titulaciNLabel">
       <property name="text">
        <string>Titulación</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QLineEdit" name="addtitulacion"/>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="aOsDeExperienciaLabel">
       <property name="text">
        <string>Años de experiencia</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="QSpinBox" name="addanos"/>
     </item>
-    <item row="6" column="0">
+    <item row="7" column="0">
      <widget class="QLabel" name="tipoDeVALabel">
       <property name="text">
        <string>Tipo de vía</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="1">
+    <item row="7" column="1">
      <widget class="QComboBox" name="comboBox">
       <item>
        <property name="text">
@@ -99,52 +99,62 @@
       </item>
      </widget>
     </item>
-    <item row="7" column="0">
+    <item row="8" column="0">
      <widget class="QLabel" name="nombreDeVALabel">
       <property name="text">
        <string>Nombre de vía</string>
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="8" column="1">
      <widget class="QLineEdit" name="addnombrevia"/>
     </item>
-    <item row="8" column="0">
+    <item row="9" column="0">
      <widget class="QLabel" name="cDigoPostalLabel">
       <property name="text">
        <string>Código Postal</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="1">
+    <item row="9" column="1">
      <widget class="QLineEdit" name="addcodigopostal"/>
     </item>
-    <item row="9" column="0">
+    <item row="10" column="0">
      <widget class="QLabel" name="localidadLabel">
       <property name="text">
        <string>Localidad</string>
       </property>
      </widget>
     </item>
-    <item row="9" column="1">
+    <item row="10" column="1">
      <widget class="QLineEdit" name="addlocalidad"/>
     </item>
-    <item row="10" column="0">
+    <item row="11" column="0">
      <widget class="QLabel" name="provinciaLabel">
       <property name="text">
        <string>Provincia</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="1">
+    <item row="11" column="1">
      <widget class="QLineEdit" name="addprovincia"/>
     </item>
-    <item row="11" column="1">
+    <item row="12" column="1">
      <widget class="QPushButton" name="addenviar">
       <property name="text">
        <string>Enviar</string>
       </property>
      </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="telFonosLabel">
+      <property name="text">
+       <string>Teléfono</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="addtelefono"/>
     </item>
    </layout>
   </widget>
