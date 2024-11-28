@@ -54,23 +54,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="LEmail">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>Email:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1">
       <widget class="QLabel" name="LDNI">
        <property name="styleSheet">
@@ -91,6 +74,16 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="LEmail">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Email:</string>
+       </property>
+      </widget>
+     </item>
      <item row="3" column="1">
       <widget class="QLabel" name="LTV">
        <property name="styleSheet">
@@ -98,6 +91,16 @@
        </property>
        <property name="text">
         <string>Tipo vía:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="LCP">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Codigo Postal:</string>
        </property>
       </widget>
      </item>
@@ -121,27 +124,50 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="LCP">
+     <item row="9" column="1">
+      <widget class="QPushButton" name="btnDeleteTelf">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">background-color: rgb(229, 243, 186);</string>
        </property>
        <property name="text">
-        <string>Codigo Postal:</string>
+        <string>Borrar TLF</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="0">
-      <widget class="QListWidget" name="listTelefonos">
-       <property name="maximumSize">
-        <size>
-         <width>275</width>
-         <height>100</height>
-        </size>
-       </property>
+     <item row="8" column="1">
+      <widget class="QPushButton" name="btnEditTelf">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">background-color: rgb(229, 243, 186);</string>
        </property>
+       <property name="text">
+        <string>Editar TLF</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" rowspan="3">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Teléfonos</string>
+       </property>
+       <widget class="QListWidget" name="listTelefonos">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>20</y>
+          <width>261</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>275</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(92, 73, 61);</string>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -184,38 +210,6 @@ border-color: transparent;</string>
      <string>Usuario seleccionado - </string>
     </property>
    </widget>
-  </widget>
-  <widget class="QPushButton" name="btnEditTelf">
-   <property name="geometry">
-    <rect>
-     <x>100</x>
-     <y>440</y>
-     <width>101</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(229, 243, 186);</string>
-   </property>
-   <property name="text">
-    <string>Editar TLF</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btnDeleteTelf">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>440</y>
-     <width>91</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(229, 243, 186);</string>
-   </property>
-   <property name="text">
-    <string>Borrar TLF</string>
-   </property>
   </widget>
  </widget>
  <resources/>

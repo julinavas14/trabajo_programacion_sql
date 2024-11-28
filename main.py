@@ -288,7 +288,7 @@ def inspeccionar_empleado():
         if conexion:
             cursor = conexion.cursor()
             try:
-                sql_select = "SELECT nombre, DNI, Email, Titulacion FROM empleados WHERE DNI = %s"
+                sql_select = "SELECT nombre, DNI, Email, Titulacion, anos_experiencia, provincia FROM empleados WHERE DNI = %s"
                 cursor.execute(sql_select, (dni,))
                 resultado = cursor.fetchone()
 
@@ -296,7 +296,7 @@ def inspeccionar_empleado():
                     QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
                     return
 
-                nombre, dni, email, titulacion = resultado
+                nombre, dni, email, titulacion, a_exp, provincia = resultado
 
                 sql_select_telf = "SELECT telf FROM telf_empleados WHERE id_empleado = (SELECT ID FROM empleados WHERE DNI = %s)"
                 cursor.execute(sql_select_telf, (dni,))
@@ -310,14 +310,15 @@ def inspeccionar_empleado():
                 dialogo.LDNI.setText(f"DNI: {dni}")
                 dialogo.LEmail.setText(f"Email: {email}")
                 dialogo.LTitu.setText(f"Titulacion: {titulacion}")
+                dialogo.LExp.setText(f"Años de experiencia: {a_exp}")
+                dialogo.LProvicia.setText(f"Provincia: {provincia}")
 
                 dialogo.listTelefonos.clear()
-                dialogo.listTelefonos.addItem("Telefonos: ")
                 for telf in telefonos:
                     dialogo.listTelefonos.addItem(telf[0])
 
-                dialogo.btnEditTelf.clicked.connect(editar_telefono)
-                dialogo.btnDeleteTelf.clicked.connect(eliminar_telefono)
+                dialogo.btnEditTelf.clicked.connect(lambda: editar_telefono(dialogo, dni))
+                dialogo.btnDeleteTelf.clicked.connect(lambda: eliminar_telefono(dialogo, dni))
                 dialogo.exec_()
 
             except Exception as e:
@@ -330,28 +331,18 @@ def inspeccionar_empleado():
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
 
-def editar_telefono():
-    dialogo = QDialog()
-    loadUi("inspeccionar.ui", dialogo)
-
+def editar_telefono(dialogo, dni):
     current_item = dialogo.listTelefonos.currentRow()
     if current_item >= 0:
         telefono_actual = dialogo.listTelefonos.item(current_item).text()
 
-        nuevo_telefono, ok = QInputDialog.getText(dialogo, "Editar Teléfono",
-                                                  "Introduce el nuevo teléfono (9 dígitos):", text=telefono_actual)
+        nuevo_telefono, ok = QInputDialog.getText(dialogo, "Editar Teléfono", "Introduce el nuevo teléfono (9 dígitos):", text=telefono_actual)
         if ok and nuevo_telefono.isdigit() and len(nuevo_telefono) == 9:
-            dni = empleados[main_window.listEmpleados.currentRow()]["DNI"]
             conexion = crear_conexion()
             if conexion:
                 cursor = conexion.cursor()
                 try:
-                    sql_update_telf = """
-                        UPDATE telf_empleados 
-                        SET telf = %s 
-                        WHERE id_empleado = (SELECT ID FROM empleados WHERE DNI = %s) 
-                        AND telf = %s
-                    """
+                    sql_update_telf = "UPDATE telf_empleados SET telf = %s WHERE id_empleado = (SELECT ID FROM empleados WHERE DNI = %s) AND telf = %s"
                     cursor.execute(sql_update_telf, (nuevo_telefono, dni, telefono_actual))
                     conexion.commit()
                     dialogo.listTelefonos.item(current_item).setText(nuevo_telefono)
@@ -368,15 +359,10 @@ def editar_telefono():
         QMessageBox.warning(dialogo, "Error", "No se seleccionó ningún teléfono.")
 
 
-
-def eliminar_telefono():
-    dialogo = QDialog()
-    loadUi("inspeccionar.ui", dialogo)
-
+def eliminar_telefono(dialogo, dni):
     current_item = dialogo.listTelefonos.currentRow()
     if current_item >= 0:
         telefono = dialogo.listTelefonos.item(current_item).text()
-        dni = empleados[main_window.listEmpleados.currentRow()]["DNI"]
 
         respuesta = QMessageBox.question(
             dialogo,
@@ -390,11 +376,7 @@ def eliminar_telefono():
             if conexion:
                 cursor = conexion.cursor()
                 try:
-                    sql_delete_telf = """
-                        DELETE FROM telf_empleados 
-                        WHERE telf = %s 
-                        AND id_empleado = (SELECT ID FROM empleados WHERE DNI = %s)
-                    """
+                    sql_delete_telf = "DELETE FROM telf_empleados WHERE telf = %s AND id_empleado = (SELECT ID FROM empleados WHERE DNI = %s)"
                     cursor.execute(sql_delete_telf, (telefono, dni))
                     conexion.commit()
                     dialogo.listTelefonos.takeItem(current_item)
