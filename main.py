@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog, QTableWidgetItem
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
 from conexion import crear_conexion
@@ -13,6 +13,8 @@ empleados = [
     {"nombre": "Juan Pérez", "puesto": "Desarrollador", "DNI": "111111"},
     {"nombre": "Ana López", "puesto": "Diseñadora", "DNI": "222222"},
 ]
+
+gastos = []
 
 app = None
 main_window = None
@@ -58,6 +60,41 @@ def iniciar_sesion():
     else:
         login_window.labelError.setText("No se pudo conectar a la base de datos")
 
+def configurar_ventana_gastos():
+    global main_window, rol_actual, gastos
+
+    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+    gastos = []
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+            cursor.execute("""SELECT empleados.nombre, prototipos.Nombre, Descripcion, Fecha, Importe, Tipo
+                           FROM gastos
+                           INNER JOIN empleados ON gastos.id_emp = empleados.ID
+                           INNER JOIN prototipos ON gastos.id_proto = prototipos.id""")
+            resultados = cursor.fetchall()
+            gastos = [{"empleado": fila[0], "proto": fila[1], "desc": fila[2], "fecha": fila[3], "importe": fila[4], "tipo": fila[5]} for fila in resultados]
+
+            main_window.tGastos.setRowCount(0)
+            main_window.tGastos.setColumnCount(5)
+            main_window.tGastos.setHorizontalHeaderLabels(
+                ["Descripción", "Importe", "Fecha", "Empleado", "Prototipo"])
+            for  gasto in gastos:
+                row_position = main_window.tGastos.rowCount()
+                main_window.tGastos.insertRow(row_position)
+
+                main_window.tGastos.setItem(row_position, 3, QTableWidgetItem(gasto['empleado']))
+                main_window.tGastos.setItem(row_position, 4, QTableWidgetItem(gasto['proto']))
+                main_window.tGastos.setItem(row_position, 0, QTableWidgetItem(gasto['desc']))
+                main_window.tGastos.setItem(row_position, 2, QTableWidgetItem(gasto['fecha'].strftime('%d/%m/%Y')))
+                main_window.tGastos.setItem(row_position, 1, QTableWidgetItem(str(gasto['importe'])))
+            print("Gastos cargados correctamente desde la BBDD")
+        except Exception as e:
+            print(f"Error al validar las credenciales: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
 
 def configurar_ventana_principal():
     global main_window, rol_actual, empleados
@@ -395,6 +432,18 @@ def eliminar_telefono(dialogo, dni):
     else:
         QMessageBox.warning(dialogo, "Error", "No se seleccionó ningún teléfono.")
 
+def abrir_ventana_gastos():
+    global main_window
+
+    main_window = QMainWindow()
+    loadUi("V_G.ui", main_window)
+    main_window.setWindowTitle("Ventana Gastos")
+
+    configurar_ventana_gastos()
+
+    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+
+    main_window.show()
 
 def abrir_ventana_principal():
     global main_window
@@ -409,6 +458,7 @@ def abrir_ventana_principal():
     main_window.btnEdit.clicked.connect(editar_empleado)
     main_window.btntlf.clicked.connect(anadir_telf)
     main_window.btninspect.clicked.connect(inspeccionar_empleado)
+    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
 
     main_window.show()
 

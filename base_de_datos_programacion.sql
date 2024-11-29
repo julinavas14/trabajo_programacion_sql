@@ -40,7 +40,6 @@ CREATE OR REPLACE TABLE prototipos(
 	CONSTRAINT rel FOREIGN KEY(id_proto_rel)
 		REFERENCES prototipos(id)
 		ON DELETE set null,
-		-- Si se borra un proyecto no desaparecen sus relacionados
 	CONSTRAINT fecha CHECK (Fecha_fin > Fecha_inicio),
 	CONSTRAINT max_horas CHECK (Horas_est >= 30)
 );
