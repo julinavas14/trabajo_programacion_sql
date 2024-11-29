@@ -14,7 +14,9 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(58, 53, 47);</string>
+   <string notr="true">color:white;
+background-color: rgb(58, 53, 47);
+</string>
   </property>
   <property name="labelUsuario" stdset="0">
    <string/>

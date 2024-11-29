@@ -2,9 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
-
 from conexion import crear_conexion
-import qdarkstyle
 
 usuarios = {
     "admin": {"password": "1234", "role": "admin"},
@@ -21,10 +19,10 @@ main_window = None
 login_window = None
 usuario_actual = None
 rol_actual = None
-
+dni_actual = None
 
 def iniciar_sesion():
-    global usuario_actual, rol_actual, main_window, login_window
+    global usuario_actual, rol_actual, main_window, login_window, dni_actual
 
     email = login_window.inputUsuario.text()
     dni = login_window.inputContrasena.text()
@@ -41,7 +39,7 @@ def iniciar_sesion():
             if resultado:
                 nombre, email_resultado, dni_resultado = resultado
                 usuario_actual = nombre
-
+                dni_actual = dni_resultado
                 if email == "aroldanrabanal@safareyes.es" or email == "jnavasmedina@safareyes.es" or email=="admin":
                     rol_actual = "admin"
                 else:
@@ -94,9 +92,7 @@ def configurar_ventana_principal():
         main_window.btnDelete.setEnabled(True)
     else:
         main_window.btnAdd.setEnabled(False)
-        main_window.btnEdit.setEnabled(False)
         main_window.btnDelete.setEnabled(False)
-        main_window.listEmpleados.hide()
 
 
 def anadir_empleado():
@@ -176,28 +172,30 @@ def eliminar_empleado():
 
 
 def editar_empleado():
-    global main_window
+    global main_window, usuario_actual, dni_actual
 
     current_item = main_window.listEmpleados.currentRow()
     if current_item >= 0:
         empleado = empleados[current_item]
-        nombre_anterior = empleado["nombre"]
-        dni = empleado["DNI"].strip()
+        dni_empleado = empleado["DNI"]
 
-        #print(f"DNI seleccionado: {dni}")
+        if rol_actual == "user" and dni_actual != dni_empleado:
+            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes editar tu propio perfil.")
+            return
+
         conexion = crear_conexion()
         if conexion:
             cursor = conexion.cursor()
             try:
                 sql_select = "SELECT nombre, DNI, Email, Titulacion, anos_experiencia FROM empleados WHERE DNI = %s"
-                cursor.execute(sql_select, (dni,))
+                cursor.execute(sql_select, (dni_empleado,))
                 resultado = cursor.fetchone()
 
                 if not resultado:
                     QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
                     return
 
-                nombre, DNI, email, titulacion, anos_experiencia = resultado
+                nombre, dni, email, titulacion, anos_experiencia = resultado
 
                 dialogo = QDialog()
                 loadUi("formulario.ui", dialogo)
@@ -205,7 +203,7 @@ def editar_empleado():
 
                 dialogo.addnombre.setText(nombre)
                 dialogo.addemail.setText(email)
-                dialogo.addDNI.setText(DNI)
+                dialogo.addDNI.setText(dni)
                 dialogo.addtitulacion.setText(titulacion)
                 dialogo.addanos.setValue(int(anos_experiencia))
                 dialogo.addenviar.clicked.connect(dialogo.accept)
@@ -225,24 +223,27 @@ def editar_empleado():
                     main_window.listEmpleados.item(current_item).setText(f"{nuevo_nombre} - {nueva_titulacion} - {nuevo_DNI}")
 
                     sql_update = "UPDATE empleados SET nombre = %s, Email = %s, DNI = %s, Titulacion = %s, anos_experiencia = %s WHERE DNI = %s"
-                    cursor.execute(sql_update, (nuevo_nombre, nuevo_email, nuevo_DNI, nueva_titulacion, nuevos_anos_experiencia, dni))
+                    cursor.execute(sql_update, (nuevo_nombre, nuevo_email, nuevo_DNI, nueva_titulacion, nuevos_anos_experiencia, dni_empleado))
                     conexion.commit()
-                    print(f"Empleado '{nombre_anterior}' actualizado a '{nuevo_nombre}' correctamente.")
+                    print(f"Empleado con DNI {dni_empleado} actualizado correctamente.")
             except Exception as e:
-                print(f"Error al obtener o actualizar los datos del empleado: {e}")
+                print(f"Error al actualizar los datos del empleado: {e}")
                 QMessageBox.critical(main_window, "Error", "No se pudo editar el empleado.")
             finally:
                 cursor.close()
                 conexion.close()
 
+
 def anadir_telf():
-    global main_window
+    global main_window, dni_actual
 
     current_item = main_window.listEmpleados.currentRow()
     if current_item >= 0:
         empleado = empleados[current_item]
         dni = empleado["DNI"]
-
+        if rol_actual == "user" and dni_actual != dni:
+            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes añadir teléfonos a tu propio perfil.")
+            return
         conexion = crear_conexion()
         if conexion:
             cursor = conexion.cursor()
@@ -283,6 +284,10 @@ def inspeccionar_empleado():
     if current_item >= 0:
         empleado = empleados[current_item]
         dni = empleado["DNI"]
+
+        if rol_actual == "user" and dni_actual != dni:
+            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes inspeccionar tu propio perfil.")
+            return
 
         conexion = crear_conexion()
         if conexion:
