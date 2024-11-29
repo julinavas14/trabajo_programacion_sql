@@ -2,9 +2,7 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
-
 from conexion import crear_conexion
-import qdarkstyle
 
 usuarios = {
     "admin": {"password": "1234", "role": "admin"},
