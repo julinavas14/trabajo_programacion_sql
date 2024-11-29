@@ -27,7 +27,7 @@ background-color: rgb(58, 53, 47);
      <rect>
       <x>380</x>
       <y>200</y>
-      <width>161</width>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -43,7 +43,7 @@ font-family: 'Open Sans', Arial, sans-serif;
 color: white</string>
     </property>
     <property name="text">
-     <string>Administración de datos</string>
+     <string>Administración de gastos</string>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -98,8 +98,7 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(192, 203, 155);
-color:black;</string>
+      <string notr="true">color: black;</string>
      </property>
      <property name="text">
       <string>Empleados</string>
@@ -115,7 +114,8 @@ color:black;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color:black;</string>
+      <string notr="true">background-color: rgb(192, 203, 155);
+color:black;</string>
      </property>
      <property name="text">
       <string>Gastos</string>
@@ -228,7 +228,7 @@ QPushButton:pressed {
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="btnAdd">
+    <widget class="QPushButton" name="btnAddGastos">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -257,7 +257,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnDelete">
+    <widget class="QPushButton" name="btnDeleteGastos">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -286,7 +286,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnEdit">
+    <widget class="QPushButton" name="btnEditGastos">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -341,7 +341,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btninspect">
+    <widget class="QPushButton" name="btninspectGastos">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -389,7 +389,10 @@ QPushButton:pressed {
        <height>319</height>
       </rect>
      </property>
-     <widget class="QListWidget" name="listEmpleados">
+     <widget class="QTableWidget" name="tGastos">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -399,9 +402,41 @@ QPushButton:pressed {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: white;
+       <string notr="true">color: black;
 background-color: rgb(92, 73, 61);</string>
       </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+      <property name="cornerButtonEnabled">
+       <bool>true</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>Descripción</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Importe</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Empleado</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Prototipo</string>
+       </property>
+      </column>
      </widget>
     </widget>
    </widget>
