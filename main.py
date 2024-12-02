@@ -16,6 +16,8 @@ empleados = [
 
 gastos = []
 
+protos=[]
+
 app = None
 main_window = None
 login_window = None
@@ -69,26 +71,17 @@ def configurar_ventana_gastos():
     if conexion:
         cursor = conexion.cursor()
         try:
-            cursor.execute("""SELECT empleados.nombre, prototipos.Nombre, Descripcion, Fecha, Importe, Tipo
+            cursor.execute("""SELECT empleados.nombre, prototipos.Nombre, Descripcion, Fecha, Importe, Tipo, id
                            FROM gastos
                            INNER JOIN empleados ON gastos.id_emp = empleados.ID
                            INNER JOIN prototipos ON gastos.id_proto = prototipos.id""")
             resultados = cursor.fetchall()
-            gastos = [{"empleado": fila[0], "proto": fila[1], "desc": fila[2], "fecha": fila[3], "importe": fila[4], "tipo": fila[5]} for fila in resultados]
+            gastos = [{"empleado": fila[0], "proto": fila[1], "desc": fila[2], "fecha": fila[3], "importe": fila[4], "tipo": fila[5], "id": fila[6]} for fila in resultados]
 
-            main_window.tGastos.setRowCount(0)
-            main_window.tGastos.setColumnCount(5)
-            main_window.tGastos.setHorizontalHeaderLabels(
-                ["Descripción", "Importe", "Fecha", "Empleado", "Prototipo"])
-            for  gasto in gastos:
-                row_position = main_window.tGastos.rowCount()
-                main_window.tGastos.insertRow(row_position)
+            main_window.listGastos.clear()
+            for gasto in gastos:
+                main_window.listGastos.addItem(f"{gasto['empleado']} - {gasto['proto']} - {gasto['desc']} - {gasto['fecha']} - {gasto['importe']}")
 
-                main_window.tGastos.setItem(row_position, 3, QTableWidgetItem(gasto['empleado']))
-                main_window.tGastos.setItem(row_position, 4, QTableWidgetItem(gasto['proto']))
-                main_window.tGastos.setItem(row_position, 0, QTableWidgetItem(gasto['desc']))
-                main_window.tGastos.setItem(row_position, 2, QTableWidgetItem(gasto['fecha'].strftime('%d/%m/%Y')))
-                main_window.tGastos.setItem(row_position, 1, QTableWidgetItem(str(gasto['importe'])))
             print("Gastos cargados correctamente desde la BBDD")
         except Exception as e:
             print(f"Error al validar las credenciales: {e}")
@@ -131,6 +124,40 @@ def configurar_ventana_principal():
         main_window.btnAdd.setEnabled(False)
         main_window.btnDelete.setEnabled(False)
 
+def configurar_ventana_proto():
+    global main_window, rol_actual, protos
+
+    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+
+    protos = []
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+
+            cursor.execute("SELECT Nombre, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est, id FROM prototipos")
+            resultados = cursor.fetchall()
+
+            protos = [{"nombre": fila[0], "fecha_ini": fila[1], "fecha_fin": fila[2], "presu": fila[3], "horas": fila[4], "id": fila[5]} for fila in resultados]
+
+            main_window.listProto.clear()
+            for proto in protos:
+                main_window.listProto.addItem(f"{proto['nombre']} - {proto['fecha_ini']} - {proto['fecha_fin']} - Presupuesto: {proto['presu']}€ - Horas: {proto['horas']}")
+
+            print("Prototipos cargados correctamente desde la base de datos.")
+        except Exception as e:
+            print(f"Error al cargar los prototipos: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    if rol_actual == "admin":
+        main_window.btnAddProto.setEnabled(True)
+        main_window.btnEditProto.setEnabled(True)
+        main_window.btnDeleteProto.setEnabled(True)
+    else:
+        main_window.btnAddProto.setEnabled(False)
+        main_window.btnDeleteProto.setEnabled(False)
 
 def anadir_empleado():
     global main_window
@@ -171,6 +198,71 @@ def anadir_empleado():
                 cursor.close()
                 conexion.close()
 
+def eliminar_gasto():
+    global main_window
+
+    current_item = main_window.listGastos.currentRow()
+
+    if current_item >= 0:
+        gasto = gastos[current_item]
+        id = gasto["id"]
+
+        respuesta = QMessageBox.question(
+            main_window,
+            "Confirmar eliminación",
+            f"¿Estás seguro de que deseas eliminar a {id}?",
+            QMessageBox.Si | QMessageBox.No
+        )
+
+        if respuesta == QMessageBox.Si:
+            empleados.pop(current_item)
+            main_window.listGastos.takeItem(current_item)
+
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_delete = "DELETE FROM gastos WHERE id = %s"
+                    cursor.execute(sql_delete, (id,))
+                    conexion.commit()
+                    print(f"Empleado '{id}' eliminado correctamente de la base de datos.")
+                except Exception as e:
+                    print(f"Error al eliminar el empleado de la base de datos: {e}")
+                cursor.close()
+                conexion.close()
+def eliminar_proto():
+    global main_window
+
+    current_item = main_window.listProto.currentRow()
+
+    if current_item >= 0:
+        proto = protos[current_item]
+        nombre_proto = proto["nombre"]
+        id = proto["id"]
+
+        respuesta = QMessageBox.question(
+            main_window,
+            "Confirmar eliminación",
+            f"¿Estás seguro de que deseas eliminar a {nombre_proto}?",
+            QMessageBox.Si | QMessageBox.No
+        )
+
+        if respuesta == QMessageBox.Si:
+            empleados.pop(current_item)
+            main_window.listProto.takeItem(current_item)
+
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_delete = "DELETE FROM prototipos WHERE id = %s"
+                    cursor.execute(sql_delete, (id,))
+                    conexion.commit()
+                    print(f"Empleado '{nombre_proto}' eliminado correctamente de la base de datos.")
+                except Exception as e:
+                    print(f"Error al eliminar el empleado de la base de datos: {e}")
+                cursor.close()
+                conexion.close()
 
 
 def eliminar_empleado():
@@ -442,6 +534,21 @@ def abrir_ventana_gastos():
     configurar_ventana_gastos()
 
     main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+
+    main_window.show()
+
+def abrir_ventana_proto():
+    global main_window
+
+    main_window = QMainWindow()
+    loadUi("V_P.ui", main_window)
+    main_window.setWindowTitle("Ventana Prototipos")
+
+    configurar_ventana_proto()
+
+    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
 
     main_window.show()
 
@@ -459,6 +566,7 @@ def abrir_ventana_principal():
     main_window.btntlf.clicked.connect(anadir_telf)
     main_window.btninspect.clicked.connect(inspeccionar_empleado)
     main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
 
     main_window.show()
 

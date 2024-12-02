@@ -389,10 +389,7 @@ QPushButton:pressed {
        <height>319</height>
       </rect>
      </property>
-     <widget class="QTableWidget" name="tGastos">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
+     <widget class="QListWidget" name="listGastos">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -402,41 +399,9 @@ QPushButton:pressed {
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: black;
+       <string notr="true">color: white;
 background-color: rgb(92, 73, 61);</string>
       </property>
-      <property name="showGrid">
-       <bool>true</bool>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <property name="wordWrap">
-       <bool>true</bool>
-      </property>
-      <property name="cornerButtonEnabled">
-       <bool>true</bool>
-      </property>
-      <column>
-       <property name="text">
-        <string>Descripción</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Importe</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Empleado</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Prototipo</string>
-       </property>
-      </column>
      </widget>
     </widget>
    </widget>
