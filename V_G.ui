@@ -248,7 +248,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/agregar-usuario (1).png</normaloff>imagenes/agregar-usuario (1).png</iconset>
+       <normaloff>imagenes/costo.png</normaloff>imagenes/costo.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -277,7 +277,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/borrar-usuario.png</normaloff>imagenes/borrar-usuario.png</iconset>
+       <normaloff>imagenes/sin-dinero.png</normaloff>imagenes/sin-dinero.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -306,7 +306,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/lapiz-de-usuario.png</normaloff>imagenes/lapiz-de-usuario.png</iconset>
+       <normaloff>imagenes/financiero.png</normaloff>imagenes/financiero.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -358,7 +358,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/descubrir.png</normaloff>imagenes/descubrir.png</iconset>
+       <normaloff>imagenes/auditoria.png</normaloff>imagenes/auditoria.png</iconset>
      </property>
      <property name="iconSize">
       <size>
