@@ -138,41 +138,6 @@ background-color: rgb(92, 73, 61);</string>
      </item>
     </layout>
    </widget>
-   <widget class="QPushButton" name="btnEditTelf">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>272</y>
-      <width>256</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(229, 243, 186);
-color: black;</string>
-    </property>
-    <property name="text">
-     <string>Editar</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnDeleteTelf">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>272</y>
-      <width>256</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(229, 243, 186);
-color: black;
-</string>
-    </property>
-    <property name="text">
-     <string>Borrar</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="frame_2">
    <property name="geometry">

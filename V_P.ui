@@ -40,7 +40,8 @@ background-color: rgb(58, 53, 47);
     <property name="styleSheet">
      <string notr="true">font: 15px;
 font-family: 'Open Sans', Arial, sans-serif;
-color: white</string>
+color: white;
+font-weight: bold;</string>
     </property>
     <property name="text">
      <string>Administración de prototipos</string>
@@ -232,9 +233,9 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>20</y>
+       <y>30</y>
        <width>211</width>
-       <height>61</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="cursor">
@@ -261,9 +262,9 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>110</y>
+       <y>130</y>
        <width>211</width>
-       <height>61</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="cursor">
@@ -319,7 +320,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>340</y>
+       <y>330</y>
        <width>211</width>
        <height>81</height>
       </rect>
