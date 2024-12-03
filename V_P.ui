@@ -14,9 +14,23 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">color:white;
-background-color: rgb(58, 53, 47);
-</string>
+   <string notr="true">QMessageBox{
+	background-color: #2d2d2d;
+	color: white;
+}
+QMessageBox QPushButton {
+	background-color: #5a5a5a;
+	color: white;
+    padding: 5px;
+	border-radius: 5px;
+}
+QMessageBox QPushButton:hover {
+	background-color: #6c6c6c;
+}
+*{
+	color :white;
+	background-color: rgb(58, 53, 47);
+}</string>
   </property>
   <property name="labelUsuario" stdset="0">
    <string/>
@@ -40,8 +54,7 @@ background-color: rgb(58, 53, 47);
     <property name="styleSheet">
      <string notr="true">font: 15px;
 font-family: 'Open Sans', Arial, sans-serif;
-color: white;
-font-weight: bold;</string>
+color: white</string>
     </property>
     <property name="text">
      <string>Administración de prototipos</string>
@@ -233,9 +246,9 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>30</y>
+       <y>20</y>
        <width>211</width>
-       <height>81</height>
+       <height>61</height>
       </rect>
      </property>
      <property name="cursor">
@@ -262,9 +275,9 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>130</y>
+       <y>110</y>
        <width>211</width>
-       <height>81</height>
+       <height>61</height>
       </rect>
      </property>
      <property name="cursor">
@@ -320,7 +333,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>330</y>
+       <y>340</y>
        <width>211</width>
        <height>81</height>
       </rect>
