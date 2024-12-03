@@ -666,6 +666,50 @@ def inspeccionar_empleado():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def inspeccionar_proto():
+    global main_window
+
+    current_item = main_window.listProto.currentRow()
+    if current_item >= 0:
+        proto = protos[current_item]
+        id = proto["id"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = "SELECT Nombre, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est, id_proto_rel, Descripcion FROM prototipos WHERE id = %s"
+                cursor.execute(sql_select, (id,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
+                    return
+
+                nombre, fecha_ini, fecha_fin, presu, horas, relacion, descp = resultado
+
+
+                dialogo = QDialog()
+                loadUi("inspeccionar_proto.ui", dialogo)
+                dialogo.setWindowTitle("Inspeccionar Prototipos")
+                dialogo.labelusu2.setText(f"Protoripo seleccionado - {nombre}")
+                dialogo.LNombre.setText(f"Nombre: {nombre}")
+                dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
+                dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
+                dialogo.Lhoras.setText(f"Horas estimadas: {horas}")
+                dialogo.Ldesc.setText(f"{descp}")
+                dialogo.Lrela.setText(f"Se relaciona: {relacion}")
+                dialogo.exec_()
+
+            except Exception as e:
+                print(f"Error al obtener los datos del empleado: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo obtener los datos del empleado.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+
 
 def editar_telefono(dialogo, dni):
     current_item = dialogo.listTelefonos.currentRow()
@@ -750,6 +794,7 @@ def abrir_ventana_proto():
     configurar_ventana_proto()
 
     main_window.btnEditProto.clicked.connect(editar_proto)
+    main_window.btninspectProto.clicked.connect(inspeccionar_proto)
     main_window.btnDeleteProto.clicked.connect(eliminar_proto)
     main_window.btnAddProto.clicked.connect(anadir_proto)
     main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
