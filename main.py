@@ -688,6 +688,9 @@ def inspeccionar_proto():
 
                 nombre, fecha_ini, fecha_fin, presu, horas, relacion, descp = resultado
 
+                if relacion == None:
+                    relacion = "No se relaciona"
+
 
                 dialogo = QDialog()
                 loadUi("inspeccionar_proto.ui", dialogo)
@@ -696,6 +699,7 @@ def inspeccionar_proto():
                 dialogo.LNombre.setText(f"Nombre: {nombre}")
                 dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
                 dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
+                dialogo.Lpresu.setText(f"Presupuesto: {presu}€")
                 dialogo.Lhoras.setText(f"Horas estimadas: {horas}")
                 dialogo.Ldesc.setText(f"{descp}")
                 dialogo.Lrela.setText(f"Se relaciona: {relacion}")
