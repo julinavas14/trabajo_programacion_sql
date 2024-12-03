@@ -19,10 +19,10 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>80</x>
      <y>150</y>
-     <width>541</width>
-     <height>321</height>
+     <width>561</width>
+     <height>331</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -30,7 +30,9 @@
 background-color: #5c493d;
 border-radius: 15px;
 color:white;
-font-weight: bold;</string>
+font-weight: bold;
+text-align: center;
+</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -41,58 +43,29 @@ font-weight: bold;</string>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
+      <x>20</x>
+      <y>20</y>
       <width>521</width>
       <height>281</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridins">
-     <item row="1" column="0">
-      <widget class="QLabel" name="Lfin">
-       <property name="styleSheet">
-        <string notr="true">color:white;
-background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>   Fecha fin:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="Lini">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>Fecha inicio:</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1">
       <widget class="QLabel" name="Lpresu">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">background-color: rgb(92, 73, 61);
+font-size: 15px;</string>
        </property>
        <property name="text">
         <string>Presupuesto:</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="Lhoras">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>   Horas estimadas:</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="1">
       <widget class="QLabel" name="Lrela">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">background-color: rgb(92, 73, 61);
+font-size: 15px;</string>
        </property>
        <property name="text">
         <string>Se relaciona:</string>
@@ -103,23 +76,61 @@ background-color: rgb(92, 73, 61);</string>
       <widget class="QLabel" name="LNombre">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(92, 73, 61);
-color:white;</string>
+color:white;
+font-size: 15px;</string>
        </property>
        <property name="text">
         <string>   Nombre:</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0" rowspan="2" colspan="2">
+     <item row="1" column="0">
+      <widget class="QLabel" name="Lfin">
+       <property name="styleSheet">
+        <string notr="true">color:white;
+background-color: rgb(92, 73, 61);
+font-size: 15px;</string>
+       </property>
+       <property name="text">
+        <string>   Fecha fin:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="Lhoras">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);
+font-size: 15px;</string>
+       </property>
+       <property name="text">
+        <string>   Horas estimadas:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="Lini">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);
+font-size: 15px;</string>
+       </property>
+       <property name="text">
+        <string>Fecha inicio:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" colspan="2">
       <widget class="QGroupBox" name="qdesc">
+       <property name="styleSheet">
+        <string notr="true">font-size: 15px;</string>
+       </property>
        <property name="title">
         <string>Descripción:</string>
        </property>
        <widget class="QLabel" name="Ldesc">
         <property name="geometry">
          <rect>
-          <x>16</x>
-          <y>22</y>
+          <x>10</x>
+          <y>20</y>
           <width>481</width>
           <height>51</height>
          </rect>
