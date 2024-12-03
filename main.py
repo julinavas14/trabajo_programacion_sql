@@ -2,6 +2,8 @@ import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog, QTableWidgetItem
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
+from PyQt5 import QtCore
+import datetime
 from conexion import crear_conexion
 
 usuarios = {
@@ -15,6 +17,8 @@ empleados = [
 ]
 
 gastos = []
+
+protos=[]
 
 app = None
 main_window = None
@@ -69,26 +73,17 @@ def configurar_ventana_gastos():
     if conexion:
         cursor = conexion.cursor()
         try:
-            cursor.execute("""SELECT empleados.nombre, prototipos.Nombre, Descripcion, Fecha, Importe, Tipo
+            cursor.execute("""SELECT empleados.nombre, prototipos.Nombre, gastos.Descripcion, Fecha, Importe, Tipo, gastos.id
                            FROM gastos
                            INNER JOIN empleados ON gastos.id_emp = empleados.ID
                            INNER JOIN prototipos ON gastos.id_proto = prototipos.id""")
             resultados = cursor.fetchall()
-            gastos = [{"empleado": fila[0], "proto": fila[1], "desc": fila[2], "fecha": fila[3], "importe": fila[4], "tipo": fila[5]} for fila in resultados]
+            gastos = [{"empleado": fila[0], "proto": fila[1], "desc": fila[2], "fecha": fila[3], "importe": fila[4], "tipo": fila[5], "id": fila[6]} for fila in resultados]
 
-            main_window.tGastos.setRowCount(0)
-            main_window.tGastos.setColumnCount(5)
-            main_window.tGastos.setHorizontalHeaderLabels(
-                ["Descripción", "Importe", "Fecha", "Empleado", "Prototipo"])
-            for  gasto in gastos:
-                row_position = main_window.tGastos.rowCount()
-                main_window.tGastos.insertRow(row_position)
+            main_window.listGastos.clear()
+            for gasto in gastos:
+                main_window.listGastos.addItem(f"{gasto['empleado']} - {gasto['proto']} - {gasto['desc']} - {gasto['fecha']} - {gasto['importe']}€")
 
-                main_window.tGastos.setItem(row_position, 3, QTableWidgetItem(gasto['empleado']))
-                main_window.tGastos.setItem(row_position, 4, QTableWidgetItem(gasto['proto']))
-                main_window.tGastos.setItem(row_position, 0, QTableWidgetItem(gasto['desc']))
-                main_window.tGastos.setItem(row_position, 2, QTableWidgetItem(gasto['fecha'].strftime('%d/%m/%Y')))
-                main_window.tGastos.setItem(row_position, 1, QTableWidgetItem(str(gasto['importe'])))
             print("Gastos cargados correctamente desde la BBDD")
         except Exception as e:
             print(f"Error al validar las credenciales: {e}")
@@ -131,6 +126,40 @@ def configurar_ventana_principal():
         main_window.btnAdd.setEnabled(False)
         main_window.btnDelete.setEnabled(False)
 
+def configurar_ventana_proto():
+    global main_window, rol_actual, protos
+
+    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+
+    protos = []
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+
+            cursor.execute("SELECT Nombre, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est, id FROM prototipos")
+            resultados = cursor.fetchall()
+
+            protos = [{"nombre": fila[0], "fecha_ini": fila[1], "fecha_fin": fila[2], "presu": fila[3], "horas": fila[4], "id": fila[5]} for fila in resultados]
+
+            main_window.listProto.clear()
+            for proto in protos:
+                main_window.listProto.addItem(f"{proto['nombre']} - {proto['fecha_ini']} - {proto['fecha_fin']} - Presupuesto: {proto['presu']}€ - Horas: {proto['horas']}")
+
+            print("Prototipos cargados correctamente desde la base de datos.")
+        except Exception as e:
+            print(f"Error al cargar los prototipos: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    if rol_actual == "admin":
+        main_window.btnAddProto.setEnabled(True)
+        main_window.btnEditProto.setEnabled(True)
+        main_window.btnDeleteProto.setEnabled(True)
+    else:
+        main_window.btnAddProto.setEnabled(False)
+        main_window.btnDeleteProto.setEnabled(False)
 
 def anadir_empleado():
     global main_window
@@ -171,6 +200,164 @@ def anadir_empleado():
                 cursor.close()
                 conexion.close()
 
+def anadir_proto():
+    global main_window, protos
+
+    dialogo = QDialog()
+    try:
+        loadUi("formulario_proto.ui", dialogo)
+    except Exception as e:
+        print(f"Error al cargar el formulario: {e}")
+        return
+
+    dialogo.setWindowTitle("Añadir Prototipo")
+
+    print("Verificando widgets del formulario...")
+    widgets = ["addnombre", "addini", "addfin", "addpresu", "addhoras", "addrelacionan", "addDesc"]
+    for widget in widgets:
+        if not hasattr(dialogo, widget):
+            print(f"El formulario no contiene el widget: {widget}")
+            QMessageBox.critical(dialogo, "Error", f"Falta el widget '{widget}' en el formulario.")
+            return
+
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+            cursor.execute("SELECT id, Nombre FROM prototipos")
+            resultados = cursor.fetchall()
+
+            dialogo.addrelacionan.clear()
+            dialogo.addrelacionan.addItem("Ninguno", "NULL")
+
+            for id, nombre in resultados:
+                dialogo.addrelacionan.addItem(nombre, id)
+        except Exception as e:
+            print(f"Error al cargar prototipos para relacionar: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    dialogo.addenviar.clicked.connect(dialogo.accept)
+
+    if dialogo.exec_() == QDialog.Accepted:
+        try:
+            nombre = dialogo.addnombre.text().strip()
+            fecha_inicio = dialogo.addini.text().strip()
+            fecha_fin = dialogo.addfin.text().strip()
+            presupuesto = dialogo.addpresu.value()
+            horas = dialogo.addhoras.value()
+            relacion_id = dialogo.addrelacionan.currentData()
+            descp = dialogo.addDesc.toPlainText().strip()
+
+            print(f"Datos capturados: {nombre}, {fecha_inicio}, {fecha_fin}, {presupuesto}, {horas}, {relacion_id}, {descp}")
+
+            if relacion_id == "NULL":
+                relacion_id = None
+
+            try:
+                fecha_inicio = datetime.datetime.strptime(fecha_inicio, "%d/%m/%Y").strftime("%Y-%m-%d")
+                fecha_fin = datetime.datetime.strptime(fecha_fin, "%d/%m/%Y").strftime("%Y-%m-%d")
+                print(f"Fechas convertidas: {fecha_inicio}, {fecha_fin}")
+            except ValueError as e:
+                print(f"Error al convertir las fechas: {e}")
+                QMessageBox.warning(dialogo, "Error", "Las fechas deben estar en formato DD/MM/YYYY.")
+                return
+            if not nombre or not fecha_inicio or not fecha_fin:
+                print("Campos obligatorios incompletos.")
+                QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+                return
+
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_insert = """
+                    INSERT INTO prototipos (Nombre, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est, id_proto_rel, Descripcion)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    """
+                    cursor.execute(sql_insert, (nombre, fecha_inicio, fecha_fin, presupuesto, horas, relacion_id, descp))
+                    conexion.commit()
+                    protos.append({"nombre": nombre, "fecha_ini": fecha_inicio, "fecha_fin": fecha_fin, "presu": presupuesto, "horas": horas, "id": cursor.lastrowid})
+                    main_window.listProto.addItem(f"{nombre} - {fecha_inicio} - {fecha_fin} - Presupuesto: {presupuesto}€ - Horas: {horas}")
+                    print(f"Prototipo '{nombre}' añadido correctamente.")
+                except Exception as e:
+                    print(f"Error al insertar el prototipo en la base de datos: {e}")
+                    QMessageBox.critical(dialogo, "Error", "No se pudo añadir el prototipo.")
+                finally:
+                    cursor.close()
+                    conexion.close()
+        except Exception as e:
+            print(f"Error al procesar los datos del formulario: {e}")
+
+
+
+def eliminar_gasto():
+    global main_window
+
+    current_item = main_window.listGastos.currentRow()
+
+    if current_item >= 0:
+        gasto = gastos[current_item]
+        id = gasto["id"]
+
+        respuesta = QMessageBox.question(
+            main_window,
+            "Confirmar eliminación",
+            f"¿Estás seguro de que deseas eliminar a {id}?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if respuesta == QMessageBox.Yes:
+            empleados.pop(current_item)
+            main_window.listGastos.takeItem(current_item)
+
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_delete = "DELETE FROM gastos WHERE id = %s"
+                    cursor.execute(sql_delete, (id,))
+                    conexion.commit()
+                    print(f"Empleado '{id}' eliminado correctamente de la base de datos.")
+                except Exception as e:
+                    print(f"Error al eliminar el empleado de la base de datos: {e}")
+                cursor.close()
+                conexion.close()
+                
+def eliminar_proto():
+    global main_window
+
+    current_item = main_window.listProto.currentRow()
+
+    if current_item >= 0:
+        proto = protos[current_item]
+        nombre_proto = proto["nombre"]
+        id = proto["id"]
+
+        respuesta = QMessageBox.question(
+            main_window,
+            "Confirmar eliminación",
+            f"¿Estás seguro de que deseas eliminar a {nombre_proto}?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if respuesta == QMessageBox.Yes:
+            protos.pop(current_item)
+            main_window.listProto.takeItem(current_item)
+
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_delete = "DELETE FROM prototipos WHERE id = %s"
+                    cursor.execute(sql_delete, (id,))
+                    conexion.commit()
+                    print(f"Empleado '{nombre_proto}' eliminado correctamente de la base de datos.")
+                except Exception as e:
+                    print(f"Error al eliminar el empleado de la base de datos: {e}")
+                cursor.close()
+                conexion.close()
 
 
 def eliminar_empleado():
@@ -270,6 +457,113 @@ def editar_empleado():
                 cursor.close()
                 conexion.close()
 
+def editar_proto():
+    global main_window, protos
+
+    current_item = main_window.listProto.currentRow()
+    if current_item < 0 or current_item >= len(protos):
+        QMessageBox.warning(main_window, "Error", "No se seleccionó un prototipo válido.")
+        return
+
+    proto = protos[current_item]
+    proto_id = proto["id"]
+
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+            sql_select = """
+                SELECT Nombre, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est, id_proto_rel, Descripcion
+                FROM prototipos
+                WHERE id = %s
+            """
+            cursor.execute(sql_select, (proto_id,))
+            resultado = cursor.fetchone()
+
+            if not resultado:
+                QMessageBox.warning(main_window, "Error", "No se encontraron datos del prototipo en la base de datos.")
+                return
+
+            nombre, fecha_inicio, fecha_fin, presupuesto, horas, id_proto_rel, descripcion = resultado
+
+            # Convertir fechas a cadenas
+            fecha_inicio_str = fecha_inicio.strftime("%Y-%m-%d")
+            fecha_fin_str = fecha_fin.strftime("%Y-%m-%d")
+
+            # Abrir diálogo para editar
+            dialogo = QDialog()
+            loadUi("formulario_proto.ui", dialogo)
+            dialogo.setWindowTitle("Editar Prototipo")
+
+            # Prellenar los campos con la información actual
+            dialogo.addnombre.setText(nombre)
+            dialogo.addini.setDate(QtCore.QDate.fromString(fecha_inicio_str, "yyyy-MM-dd"))
+            dialogo.addfin.setDate(QtCore.QDate.fromString(fecha_fin_str, "yyyy-MM-dd"))
+            dialogo.addpresu.setValue(presupuesto)
+            dialogo.addhoras.setValue(horas)
+            dialogo.addDesc.setPlainText(descripcion)
+
+            # Cargar relaciones disponibles
+            cursor.execute("SELECT id, Nombre FROM prototipos")
+            resultados = cursor.fetchall()
+
+            dialogo.addrelacionan.clear()
+            dialogo.addrelacionan.addItem("Ninguno", None)
+            for id, nombre_rel in resultados:
+                dialogo.addrelacionan.addItem(nombre_rel, id)
+
+            # Seleccionar la relación actual
+            for i in range(dialogo.addrelacionan.count()):
+                if dialogo.addrelacionan.itemData(i) == id_proto_rel:
+                    dialogo.addrelacionan.setCurrentIndex(i)
+                    break
+
+            dialogo.addenviar.clicked.connect(dialogo.accept)
+
+            if dialogo.exec_() == QDialog.Accepted:
+                nuevo_nombre = dialogo.addnombre.text().strip()
+                nueva_fecha_inicio = dialogo.addini.date().toString("yyyy-MM-dd")
+                nueva_fecha_fin = dialogo.addfin.date().toString("yyyy-MM-dd")
+                nuevo_presupuesto = dialogo.addpresu.value()
+                nuevas_horas = dialogo.addhoras.value()
+                nueva_relacion_id = dialogo.addrelacionan.currentData()
+                nueva_descripcion = dialogo.addDesc.toPlainText().strip()
+
+                if not nuevo_nombre or not nueva_fecha_inicio or not nueva_fecha_fin:
+                    QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+                    return
+
+                # Actualizar en la base de datos
+                sql_update = """
+                    UPDATE prototipos
+                    SET Nombre = %s, Fecha_inicio = %s, Fecha_fin = %s, Presupuesto = %s,
+                        Horas_est = %s, id_proto_rel = %s, Descripcion = %s
+                    WHERE id = %s
+                """
+                cursor.execute(sql_update, (nuevo_nombre, nueva_fecha_inicio, nueva_fecha_fin, nuevo_presupuesto,
+                                            nuevas_horas, nueva_relacion_id, nueva_descripcion, proto_id))
+                conexion.commit()
+
+                # Actualizar la lista local e interfaz
+                protos[current_item] = {
+                    "nombre": nuevo_nombre,
+                    "fecha_ini": nueva_fecha_inicio,
+                    "fecha_fin": nueva_fecha_fin,
+                    "presu": nuevo_presupuesto,
+                    "horas": nuevas_horas,
+                    "id": proto_id,
+                }
+                main_window.listProto.item(current_item).setText(
+                    f"{nuevo_nombre} - {nueva_fecha_inicio} - {nueva_fecha_fin} - Presupuesto: {nuevo_presupuesto}€ - Horas: {nuevas_horas}"
+                )
+
+                print(f"Prototipo '{nuevo_nombre}' actualizado correctamente.")
+        except Exception as e:
+            print(f"Error al actualizar el prototipo: {e}")
+            QMessageBox.critical(main_window, "Error", "No se pudo actualizar el prototipo.")
+        finally:
+            cursor.close()
+            conexion.close()
 
 def anadir_telf():
     global main_window, dni_actual
@@ -442,6 +736,24 @@ def abrir_ventana_gastos():
     configurar_ventana_gastos()
 
     main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+
+    main_window.show()
+
+def abrir_ventana_proto():
+    global main_window
+
+    main_window = QMainWindow()
+    loadUi("V_P.ui", main_window)
+    main_window.setWindowTitle("Ventana Prototipos")
+
+    configurar_ventana_proto()
+
+    main_window.btnEditProto.clicked.connect(editar_proto)
+    main_window.btnDeleteProto.clicked.connect(eliminar_proto)
+    main_window.btnAddProto.clicked.connect(anadir_proto)
+    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
 
     main_window.show()
 
@@ -459,6 +771,7 @@ def abrir_ventana_principal():
     main_window.btntlf.clicked.connect(anadir_telf)
     main_window.btninspect.clicked.connect(inspeccionar_empleado)
     main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
 
     main_window.show()
 

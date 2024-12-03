@@ -27,7 +27,7 @@ background-color: rgb(58, 53, 47);
      <rect>
       <x>380</x>
       <y>200</y>
-      <width>181</width>
+      <width>211</width>
       <height>31</height>
      </rect>
     </property>
@@ -43,7 +43,7 @@ font-family: 'Open Sans', Arial, sans-serif;
 color: white</string>
     </property>
     <property name="text">
-     <string>Administración de gastos</string>
+     <string>Administración de prototipos</string>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -98,7 +98,7 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: black;</string>
+      <string notr="true">color:black;</string>
      </property>
      <property name="text">
       <string>Empleados</string>
@@ -114,8 +114,7 @@ QPushButton:pressed {
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(192, 203, 155);
-color:black;</string>
+      <string notr="true">color:black;</string>
      </property>
      <property name="text">
       <string>Gastos</string>
@@ -131,7 +130,8 @@ color:black;</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color:black;</string>
+      <string notr="true">color:black;
+background-color: rgb(192, 203, 155);</string>
      </property>
      <property name="text">
       <string>Prototipos</string>
@@ -192,7 +192,7 @@ color: white</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>160</y>
+      <y>170</y>
       <width>321</width>
       <height>461</height>
      </rect>
@@ -228,7 +228,7 @@ QPushButton:pressed {
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="btnAddGastos">
+    <widget class="QPushButton" name="btnAddProto">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -248,7 +248,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/costo.png</normaloff>imagenes/costo.png</iconset>
+       <normaloff>imagenes/anadir-imagen.png</normaloff>imagenes/anadir-imagen.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -257,7 +257,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnDeleteGastos">
+    <widget class="QPushButton" name="btnDeleteProto">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -277,7 +277,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/sin-dinero.png</normaloff>imagenes/sin-dinero.png</iconset>
+       <normaloff>imagenes/prototipo (2).png</normaloff>imagenes/prototipo (2).png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -286,13 +286,13 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnEditGastos">
+    <widget class="QPushButton" name="btnEditProto">
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>200</y>
+       <y>230</y>
        <width>211</width>
-       <height>61</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="cursor">
@@ -306,7 +306,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/financiero.png</normaloff>imagenes/financiero.png</iconset>
+       <normaloff>imagenes/prototipo (1).png</normaloff>imagenes/prototipo (1).png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -315,13 +315,13 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btntlf">
+    <widget class="QPushButton" name="btninspectProto">
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>290</y>
+       <y>340</y>
        <width>211</width>
-       <height>61</height>
+       <height>81</height>
       </rect>
      </property>
      <property name="cursor">
@@ -332,33 +332,7 @@ QPushButton:pressed {
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>imagenes/telefono-mas.png</normaloff>imagenes/telefono-mas.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>50</width>
-       <height>50</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btninspectGastos">
-     <property name="geometry">
-      <rect>
-       <x>50</x>
-       <y>380</y>
-       <width>211</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>imagenes/auditoria.png</normaloff>imagenes/auditoria.png</iconset>
+       <normaloff>imagenes/prototipo (3).png</normaloff>imagenes/prototipo (3).png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -389,7 +363,7 @@ QPushButton:pressed {
        <height>319</height>
       </rect>
      </property>
-     <widget class="QListWidget" name="listGastos">
+     <widget class="QListWidget" name="listProto">
       <property name="geometry">
        <rect>
         <x>0</x>
