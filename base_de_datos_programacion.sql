@@ -61,3 +61,21 @@ CREATE OR REPLACE TABLE gastos(
 		ON DELETE CASCADE,
 	CONSTRAINT lim_gasto CHECK (Importe <= 20000)
 );
+
+CREATE OR REPLACE TABLE etapas(
+	id INT auto_increment PRIMARY KEY,
+	nombre VARCHAR(20),
+	fecha_inicio DATE,
+	fecha_fin DATE,
+	estado ENUM('desarrollo', 'finalizada'),
+	id_protot INT,
+	CONSTRAINT id_prototipos FOREIGN KEY (id_protot)
+		REFERENCES prototipos(id)
+);
+
+create or replace TABLE recursos(
+	id int(3) auto_increment primary key,
+	nombre varchar(20),
+	descripcion varchar(50),
+	tipo varchar(20)
+);

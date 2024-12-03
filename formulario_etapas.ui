@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>634</width>
+    <height>419</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(128, 211, 187);</string>
+  </property>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>90</y>
+     <width>471</width>
+     <height>291</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QWidget{
+background-color: rgb(186, 253, 194);
+border-radius: 15px;
+}
+
+QLabel {
+    font-size: 14px;
+    color: black;
+    padding: 2px 4px;
+    border: none;
+}
+
+QLineEdit, QComboBox, QDoubleSpinBox, QTextEdit, QDateEdit, QSpinBox {
+    font-size: 14px;
+    color: #34495e;
+    border: 2px solid;
+	border-color: white;
+    border-radius: 4px;
+    padding: 4px;
+    background-color: transparent;
+}
+
+QPushButton {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+	background-color: rgb(229, 243, 186);
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+}
+
+QPushButton:hover {
+    background-color: rgb(202, 213, 163)
+}
+
+QPushButton:disabled {
+    background-color: #95a5a6;
+    color: #ecf0f1;
+}
+
+</string>
+   </property>
+   <widget class="QWidget" name="formLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>60</y>
+      <width>321</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="nombreLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Nombre:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="addnombre">
+       <property name="styleSheet">
+        <string notr="true">color: black;</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="fecha_iniLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Fecha inicio:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QDateEdit" name="addini">
+       <property name="date">
+        <date>
+         <year>2024</year>
+         <month>12</month>
+         <day>3</day>
+        </date>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="fecha_finLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Fecha fin:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QDateEdit" name="addfin">
+       <property name="date">
+        <date>
+         <year>2024</year>
+         <month>12</month>
+         <day>4</day>
+        </date>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="titulaciNLabel">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Estado:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <widget class="QPushButton" name="addenviar">
+       <property name="text">
+        <string>Registrar etapa</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <item>
+        <property name="text">
+         <string>Desarrollo</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Finalizada</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>50</y>
+     <width>241</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(159, 216, 166);
+border-radius: 15px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>0</y>
+      <width>151</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-size: 20px;
+font-weight: bold;
+text-align: center;</string>
+    </property>
+    <property name="text">
+     <string>Agregar Etapa</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>634</width>
-    <height>583</height>
+    <height>546</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -178,6 +178,9 @@ QPushButton:disabled {
       <widget class="QComboBox" name="addTipo">
        <property name="styleSheet">
         <string notr="true">color: black;</string>
+       </property>
+       <property name="currentText">
+        <string>Calle</string>
        </property>
        <item>
         <property name="text">
