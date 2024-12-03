@@ -27,7 +27,7 @@ background-color: rgb(58, 53, 47);
      <rect>
       <x>380</x>
       <y>200</y>
-      <width>161</width>
+      <width>221</width>
       <height>31</height>
      </rect>
     </property>
@@ -44,7 +44,7 @@ color: white;
 font-weight: bold;</string>
     </property>
     <property name="text">
-     <string>Administración de datos</string>
+     <string>Administración de empleados</string>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
