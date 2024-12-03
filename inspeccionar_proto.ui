@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>706</width>
+    <height>535</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(58, 53, 47);</string>
+  </property>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>150</y>
+     <width>541</width>
+     <height>321</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-family: 'Tahoma';
+background-color: #5c493d;
+border-radius: 15px;
+color:white;
+font-weight: bold;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>521</width>
+      <height>241</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridins">
+     <item row="2" column="1">
+      <widget class="QLabel" name="Lrela">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Se relaciona:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="LNombre">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);
+color:white;</string>
+       </property>
+       <property name="text">
+        <string>Nombre:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="Lfin">
+       <property name="styleSheet">
+        <string notr="true">color:white;
+background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Fecha fin:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="Lpresu">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Presupuesto:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0" rowspan="2" colspan="2">
+      <widget class="QGroupBox" name="Ldesc">
+       <property name="title">
+        <string>Descripción:</string>
+       </property>
+       <widget class="QListWidget" name="listTelefonos">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>20</y>
+          <width>261</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>275</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(92, 73, 61);</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="Lhoras">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Horas estimadas:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="Lini">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>Fecha inicio:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="btnEditTelf">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>272</y>
+      <width>256</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(229, 243, 186);
+color: black;</string>
+    </property>
+    <property name="text">
+     <string>Editar</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDeleteTelf">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>272</y>
+      <width>256</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(229, 243, 186);
+color: black;
+</string>
+    </property>
+    <property name="text">
+     <string>Borrar</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QFrame" name="frame_2">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>50</y>
+     <width>381</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border: 2px solid rgb(115, 189, 167);
+background-color: rgb(128, 211, 187);
+border-radius: 10px;</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="labelusu2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>341</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-size: 20px;
+border-color: transparent;</string>
+    </property>
+    <property name="text">
+     <string>Prototipo seleccionado - </string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
