@@ -22,11 +22,15 @@
      <x>90</x>
      <y>140</y>
      <width>541</width>
-     <height>291</height>
+     <height>321</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: #5c493d;</string>
+    <string notr="true">font-family: 'Tahoma';
+background-color: #5c493d;
+border-radius: 15px;
+color:white;
+font-weight: bold;</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -37,47 +41,29 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>541</width>
-      <height>291</height>
+      <x>10</x>
+      <y>10</y>
+      <width>521</width>
+      <height>241</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridins">
      <item row="0" column="0">
       <widget class="QLabel" name="LNombre">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">background-color: rgb(92, 73, 61);
+color:white;</string>
        </property>
        <property name="text">
         <string>Nombre:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="LDNI">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>DNI:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="LExp">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>Años de experiencia:</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="LEmail">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">color:white;
+background-color: rgb(92, 73, 61);</string>
        </property>
        <property name="text">
         <string>Email:</string>
@@ -87,7 +73,8 @@
      <item row="3" column="1">
       <widget class="QLabel" name="LTV">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
+        <string notr="true">background-color: rgb(92, 73, 61);
+color: white;</string>
        </property>
        <property name="text">
         <string>Tipo vía:</string>
@@ -104,16 +91,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="LTitu">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(92, 73, 61);</string>
-       </property>
-       <property name="text">
-        <string>Titulación:</string>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="1">
       <widget class="QLabel" name="LProvicia">
        <property name="styleSheet">
@@ -124,30 +101,40 @@
        </property>
       </widget>
      </item>
-     <item row="9" column="1">
-      <widget class="QPushButton" name="btnDeleteTelf">
+     <item row="1" column="1">
+      <widget class="QLabel" name="LTitu">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(229, 243, 186);</string>
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
        </property>
        <property name="text">
-        <string>Borrar TLF</string>
+        <string>Titulación:</string>
        </property>
       </widget>
      </item>
-     <item row="8" column="1">
-      <widget class="QPushButton" name="btnEditTelf">
+     <item row="2" column="0">
+      <widget class="QLabel" name="LExp">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(229, 243, 186);</string>
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
        </property>
        <property name="text">
-        <string>Editar TLF</string>
+        <string>Años de experiencia:</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0" rowspan="3">
+     <item row="0" column="1">
+      <widget class="QLabel" name="LDNI">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(92, 73, 61);</string>
+       </property>
+       <property name="text">
+        <string>DNI:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" rowspan="2" colspan="2">
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>Teléfonos</string>
+        <string>Teléfonos:</string>
        </property>
        <widget class="QListWidget" name="listTelefonos">
         <property name="geometry">
@@ -171,6 +158,41 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="btnEditTelf">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>272</y>
+      <width>256</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(229, 243, 186);
+color: black;</string>
+    </property>
+    <property name="text">
+     <string>Editar TLF</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btnDeleteTelf">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>272</y>
+      <width>256</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(229, 243, 186);
+color: black;
+</string>
+    </property>
+    <property name="text">
+     <string>Borrar TLF</string>
+    </property>
    </widget>
   </widget>
   <widget class="QFrame" name="frame_2">
@@ -203,7 +225,7 @@ border-radius: 10px;</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">font-size: 18px;
+     <string notr="true">font-size: 20px;
 border-color: transparent;</string>
     </property>
     <property name="text">
