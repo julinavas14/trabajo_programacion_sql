@@ -17,7 +17,7 @@ empleados = [
 ]
 
 gastos = []
-
+etapas = []
 protos=[]
 
 app = None
@@ -155,12 +155,12 @@ def configurar_ventana_etapas():
             conexion.close()
 
     if rol_actual == "admin":
-        main_window.btnAddEtapas.setEnabled(True)
-        main_window.btnEditEtapas.setEnabled(True)
-        main_window.btnDeleteEtapas.setEnabled(True)
+        main_window.btnAdd.setEnabled(True)
+        main_window.btnEdit.setEnabled(True)
+        main_window.btnDelete.setEnabled(True)
     else:
-        main_window.btnAddEtapas.setEnabled(False)
-        main_window.btnDeleteEtapas.setEnabled(False)
+        main_window.btnAdd.setEnabled(False)
+        main_window.btnDelete.setEnabled(False)
 
 
 def configurar_ventana_proto():
@@ -862,6 +862,23 @@ def abrir_ventana_gastos():
 
     main_window.show()
 
+
+def abrir_ventana_etapas():
+    global main_window
+
+    main_window = QMainWindow()
+    loadUi("V_Et.ui", main_window)
+    main_window.setWindowTitle("Ventana Etapas")
+
+    configurar_ventana_etapas()
+
+    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+
+    main_window.show()
+
+
 def abrir_ventana_proto():
     global main_window
 
@@ -895,6 +912,7 @@ def abrir_ventana_principal():
     main_window.btninspect.clicked.connect(inspeccionar_empleado)
     main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
     main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    main_window.btnEtapas.clicked.connect(abrir_ventana_etapas)
 
     main_window.show()
 
