@@ -258,7 +258,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnDelete">
+    <widget class="QPushButton" name="btnDeleteEtapas">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -287,7 +287,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnEdit">
+    <widget class="QPushButton" name="btnEditEtapas">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -316,7 +316,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btninspect">
+    <widget class="QPushButton" name="btninspectEtapas">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -379,31 +379,6 @@ background-color: rgb(92, 73, 61);</string>
       </property>
      </widget>
     </widget>
-   </widget>
-   <widget class="QPushButton" name="addetapa">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>160</y>
-      <width>201</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">    background-color: #e5f3ba;
-    border: 2px solid rgb(192, 203, 155);
-    border-radius: 12px;
-    padding: 12px 20px;
-    font-family: 'Open Sans', Arial, sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-	color:black;</string>
-    </property>
-    <property name="text">
-     <string>Asignar Recurso</string>
-    </property>
    </widget>
   </widget>
  </widget>
