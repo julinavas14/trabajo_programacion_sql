@@ -381,7 +381,9 @@ def anadir_gastos():
     if dialogo.exec_() == QDialog.Accepted:
         try:
             empleados = dialogo.addempleado.currentData()
+            empleado_nombre = dialogo.addempleado.currentText()
             prototipos = dialogo.addproto.currentData()
+            proto_nombre = dialogo.addproto.currentText()
             fecha = dialogo.addfecha.date().toString("yyyy-MM-dd")
             importe = float(dialogo.addimport.text().strip().replace(',', '.'))
             descripcion = dialogo.adddesc.toPlainText().strip()
@@ -399,8 +401,8 @@ def anadir_gastos():
                                   "VALUES (%s, %s, %s, %s, %s, %s)")
                     cursor.execute(sql_insert, (empleados, prototipos, fecha, importe, descripcion, tipo))
                     conexion.commit()
-                    gastos.append({"empleado": empleados, "proto": prototipos, "desc": descripcion, "fecha": fecha, "importe": importe, "tipo": tipo, "id": cursor.lastrowid})
-                    main_window.listgastos.addItem(f"{empleados} - {prototipos} - {descripcion} - {fecha} - {importe}€")
+                    gastos.append({"empleado": empleado_nombre, "proto": proto_nombre, "desc": descripcion, "fecha": fecha, "importe": importe, "tipo": tipo, "id": cursor.lastrowid})
+                    main_window.listgastos.addItem(f"{empleado_nombre} - {proto_nombre} - {descripcion} - {fecha} - {importe}€")
 
                     print(f"Gasto de '{empleados}' añadido correctamente.")
                 except Exception as e:
