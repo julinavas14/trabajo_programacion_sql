@@ -79,3 +79,13 @@ create or replace TABLE recursos(
 	descripcion varchar(50),
 	tipo varchar(20)
 );
+
+create or replace table se_asignan(
+	id_recursos int(3),
+	id_etapas int(3),
+	primary key (id_recursos, id_etapas),
+	constraint id_asignan_recursos foreign key(id_recursos)
+		references recursos(id),
+	constraint id_asignan_etapas foreign key(id_etapas)
+		references etapas(id)
+);

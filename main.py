@@ -70,6 +70,7 @@ def configurar_ventana_gastos():
     main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
     gastos = []
     conexion = crear_conexion()
+
     if conexion:
         cursor = conexion.cursor()
         try:
@@ -80,9 +81,9 @@ def configurar_ventana_gastos():
             resultados = cursor.fetchall()
             gastos = [{"empleado": fila[0], "proto": fila[1], "desc": fila[2], "fecha": fila[3], "importe": fila[4], "tipo": fila[5], "id": fila[6]} for fila in resultados]
 
-            main_window.listGastos.clear()
+            main_window.listgastos.clear()
             for gasto in gastos:
-                main_window.listGastos.addItem(f"{gasto['empleado']} - {gasto['proto']} - {gasto['desc']} - {gasto['fecha']} - {gasto['importe']}€")
+                main_window.listgastos.addItem(f"{gasto['empleado']} - {gasto['proto']} - {gasto['desc']} - {gasto['fecha']} - {gasto['importe']}€")
 
             print("Gastos cargados correctamente desde la BBDD")
         except Exception as e:
@@ -125,6 +126,42 @@ def configurar_ventana_principal():
     else:
         main_window.btnAdd.setEnabled(False)
         main_window.btnDelete.setEnabled(False)
+
+def configurar_ventana_etapas():
+    global main_window, rol_actual, etapas
+
+    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+
+    etapas = []
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+
+            cursor.execute("SELECT id, id_emp, id_proto, Descripcion, fecha, importe, tipo FROM etapas")
+            resultados = cursor.fetchall()
+
+            etapas = [{"id_emp": fila[1], "id_proto": fila[2], "fecha": fila[4], "importe": fila[5], "tipo": fila[6]} for fila in resultados]
+
+            main_window.listetapas.clear()
+            for etapa in etapas:
+                main_window.listetapas.addItem(f"{etapa['id']} - {etapa['fecha']} - {etapa['tipo']} - Importe: {etapa['importe']}€")
+
+            print("Prototipos cargados correctamente desde la base de datos.")
+        except Exception as e:
+            print(f"Error al cargar los prototipos: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    if rol_actual == "admin":
+        main_window.btnAddEtapas.setEnabled(True)
+        main_window.btnEditEtapas.setEnabled(True)
+        main_window.btnDeleteEtapas.setEnabled(True)
+    else:
+        main_window.btnAddEtapas.setEnabled(False)
+        main_window.btnDeleteEtapas.setEnabled(False)
+
 
 def configurar_ventana_proto():
     global main_window, rol_actual, protos
@@ -193,6 +230,43 @@ def anadir_empleado():
                 cursor.execute(sql_insert, (nombre, DNI, email, puesto, a_exp))
                 conexion.commit()
                 print(f"Empleado '{nombre}' añadido correctamente.")
+            except Exception as e:
+                print(f"Error al insertar el empleado en la base de datos: {e}")
+                QMessageBox.critical(dialogo, "Error", "No se pudo añadir el empleado.")
+            finally:
+                cursor.close()
+                conexion.close()
+
+def anadir_gastos():
+    global main_window
+
+    dialogo = QDialog()
+    loadUi("formulario_gastos.ui", dialogo)
+    dialogo.setWindowTitle("Añadir gastos")
+
+    if dialogo.exec_() == QDialog.Accepted:
+        empleados = dialogo.addempleados.text().strip()
+        prototipos = dialogo.addproto.text().strip()
+        fecha = dialogo.addfecha.date().strip()
+        importe = dialogo.addimport.int().strip()
+        descripcion = dialogo.adddesc.text().strip()
+
+        if not empleados or not prototipos or not fecha or not importe or not descripcion:
+            QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+            return
+
+        gastos.append({"empleados": empleados, "prototipos": prototipos, "fecha": fecha, "importe": importe})
+        main_window.listgastos.addItem(f"{empleados} - {prototipos} - {importe}")
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_insert = ("INSERT INTO gastos (empleado, prototipo, fecha, importe, descripcion) "
+                              "VALUES (%s, %s, %s, %s, %s)")
+                cursor.execute(sql_insert, (empleados, prototipos, fecha, importe, descripcion))
+                conexion.commit()
+                print(f"Gastos de '{empleados}' añadido correctamente.")
             except Exception as e:
                 print(f"Error al insertar el empleado en la base de datos: {e}")
                 QMessageBox.critical(dialogo, "Error", "No se pudo añadir el empleado.")

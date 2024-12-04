@@ -364,7 +364,7 @@ QPushButton:pressed {
        <height>319</height>
       </rect>
      </property>
-     <widget class="QListWidget" name="listGastos">
+     <widget class="QListWidget" name="listgastos">
       <property name="geometry">
        <rect>
         <x>0</x>
