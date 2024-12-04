@@ -5,6 +5,8 @@ from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 import datetime
 from conexion import crear_conexion
+from PyQt5.QtCore import QDate
+
 
 usuarios = {
     "admin": {"password": "1234", "role": "admin"},
@@ -572,7 +574,7 @@ def anadir_etapas():
 def eliminar_gasto():
     global main_window
 
-    current_item = main_window.listGastos.currentRow()
+    current_item = main_window.listgastos.currentRow()
 
     if current_item >= 0:
         gasto = gastos[current_item]
@@ -587,7 +589,7 @@ def eliminar_gasto():
 
         if respuesta == QMessageBox.Yes:
             gastos.pop(current_item)
-            main_window.listGastos.takeItem(current_item)
+            main_window.listgastos.takeItem(current_item)
 
             conexion = crear_conexion()
             if conexion:
@@ -810,6 +812,67 @@ def editar_empleado():
             except Exception as e:
                 print(f"Error al actualizar los datos del empleado: {e}")
                 QMessageBox.critical(main_window, "Error", "No se pudo editar el empleado.")
+            finally:
+                cursor.close()
+                conexion.close()
+
+def editar_gastos():
+    global main_window, gastos, rol_actual, dni_actual
+
+    current_item = main_window.listgastos.currentRow()
+    print(f"Índice seleccionado: {current_item}")
+    if current_item >= 0:
+        gasto = gastos[current_item]
+        print(f"Gasto seleccionado: {gasto}")
+        dni_empleado = gasto.get("DNI")
+
+        # Verificar permisos
+        if rol_actual == "user" and dni_actual != dni_empleado:
+            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes editar tu propio perfil.")
+            return
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                # Consulta para obtener los datos actuales del gasto
+                print("Ejecutando consulta SELECT...")
+                sql_select = "SELECT id_emp, id_proto, fecha, importe, tipo, descripcion FROM gastos WHERE id = %s"
+                cursor.execute(sql_select, (gasto["id"],))
+                resultado = cursor.fetchone()
+                print(f"Resultado de SELECT: {resultado}")
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del gasto en la base de datos.")
+                    return
+
+                id_emp, id_proto, fecha, importe, tipo, descripcion = resultado
+
+                # Crear diálogo para edición
+                dialogo = QDialog()
+                loadUi("formulario_gastos.ui", dialogo)
+                dialogo.setWindowTitle("Editar gastos")
+
+                # Convertir fecha (datetime.date) a string en formato 'yyyy-MM-dd'
+                if isinstance(fecha, datetime.date):  # Verifica que es un objeto datetime.date
+                    fecha_str = fecha.strftime("%Y-%m-%d")  # Convierte a string
+
+                # Configurar valores actuales en el formulario
+                dialogo.addempleado.setCurrentText(str(id_emp))
+                dialogo.addproto.setCurrentText(str(id_proto))
+                dialogo.addfecha.setDate(QDate.fromString(fecha_str, "yyyy-MM-dd"))  # Usa la cadena de texto
+                dialogo.addimport.setText(f"{importe:.2f}")
+                dialogo.addtipo.setText(tipo)
+                dialogo.adddesc.setPlainText(descripcion)
+
+                if dialogo.exec_() == QDialog.Accepted:
+                    print("Formulario aceptado.")
+                    # Validaciones y actualización
+                    # ...
+                    print("Datos actualizados correctamente.")
+            except Exception as e:
+                print(f"Error al actualizar los datos del gasto: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo editar el gasto.")
             finally:
                 cursor.close()
                 conexion.close()
@@ -1166,6 +1229,55 @@ def inspeccionar_empleado():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def inspeccionar_gastos():
+    global main_window, gastos, rol_actual, dni_actual
+
+    current_item = main_window.listgastos.currentRow()
+    if current_item >= 0:
+        gasto = gastos[current_item]
+        dni = gasto["id"]
+
+        if rol_actual == "user" and dni_actual != dni:
+            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes inspeccionar tu propio perfil.")
+            return
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = "SELECT id_emp, id_proto, fecha, importe, tipo, descripcion FROM gastos WHERE id = %s"
+                cursor.execute(sql_select, (dni,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del gasto en la base de datos.")
+                    return
+
+                id_emp, id_proto, fecha, importe, tipo, descripcion = resultado
+
+                dialogo = QDialog()
+                loadUi("inspeccionar_gastos.ui", dialogo)
+                dialogo.setWindowTitle("Inspeccionar gastos")
+
+                dialogo.labelusu2.setText(f"Gasto seleccionado - ID: {dni}")
+                dialogo.LNombre.setText(f"Empleado: {id_emp}")
+                dialogo.Limport.setText(f"Importe: {importe:.2f}€")
+                dialogo.Lfecha.setText(f"Fecha: {fecha}")
+                dialogo.Ltipo.setText(f"Tipo: {tipo}")
+                dialogo.Ldesc.setText(f"{descripcion}")
+
+                dialogo.exec_()
+
+            except Exception as e:
+                print(f"Error al obtener los datos del gasto: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo obtener los datos del gasto.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+
+
 def inspeccionar_recursos():
     global main_window
 
@@ -1394,6 +1506,9 @@ def abrir_ventana_gastos():
 
     configurar_ventana_gastos()
     main_window.btnAddGastos.clicked.connect(anadir_gastos)
+    main_window.btnDeleteGastos.clicked.connect(eliminar_gasto)
+    main_window.btninspectGastos.clicked.connect(inspeccionar_gastos)
+    main_window.btnEditGastos.clicked.connect(editar_gastos)
 
     header()
 
