@@ -127,40 +127,42 @@ def configurar_ventana_principal():
         main_window.btnAdd.setEnabled(False)
         main_window.btnDelete.setEnabled(False)
 
+
 def configurar_ventana_etapas():
     global main_window, rol_actual, etapas
 
-    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+    try:
+        main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+        etapas = []
+        conexion = crear_conexion()
 
-    etapas = []
-    conexion = crear_conexion()
-    if conexion:
-        cursor = conexion.cursor()
-        try:
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                cursor.execute("""
+                    SELECT e.id, p.Nombre, e.nombre, e.fecha_inicio, e.fecha_fin, e.estado
+                    FROM etapas AS e
+                    INNER JOIN prototipos AS p ON id_protot = p.id;
+                """)
+                resultados = cursor.fetchall()
 
-            cursor.execute("SELECT id, id_emp, id_proto, Descripcion, fecha, importe, tipo FROM etapas")
-            resultados = cursor.fetchall()
+                etapas = [{"id": fila[0], "nombre_proto": fila[1], "nombre": fila[2], "fecha_ini": fila[3], "fecha_fin": fila[4], "estado": fila[5]} for fila in resultados]
 
-            etapas = [{"id_emp": fila[1], "id_proto": fila[2], "fecha": fila[4], "importe": fila[5], "tipo": fila[6]} for fila in resultados]
+                main_window.listetapas.clear()
+                for etapa in etapas:
+                    main_window.listetapas.addItem(f"{etapa['nombre']} - {etapa['nombre_proto']} - "
+                                                   f"{etapa['fecha_ini']} - {etapa['fecha_fin']} - {etapa['estado']}")
 
-            main_window.listetapas.clear()
-            for etapa in etapas:
-                main_window.listetapas.addItem(f"{etapa['id']} - {etapa['fecha']} - {etapa['tipo']} - Importe: {etapa['importe']}€")
-
-            print("Prototipos cargados correctamente desde la base de datos.")
-        except Exception as e:
-            print(f"Error al cargar los prototipos: {e}")
-        finally:
-            cursor.close()
-            conexion.close()
-
-    if rol_actual == "admin":
-        main_window.btnAdd.setEnabled(True)
-        main_window.btnEdit.setEnabled(True)
-        main_window.btnDelete.setEnabled(True)
-    else:
-        main_window.btnAdd.setEnabled(False)
-        main_window.btnDelete.setEnabled(False)
+                print("Etapas cargadas correctamente.")
+            except Exception as e:
+                print(f"Error en la consulta SQL: {e}")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            print("No se pudo conectar a la base de datos.")
+    except Exception as e:
+        print(f"Error inesperado al configurar etapas: {e}")
 
 
 def configurar_ventana_proto():
@@ -364,7 +366,73 @@ def anadir_proto():
         except Exception as e:
             print(f"Error al procesar los datos del formulario: {e}")
 
+def anadir_etapas():
+    global main_window
 
+    dialogo = QDialog()
+    loadUi("formulario_etapas.ui", dialogo)
+    dialogo.setWindowTitle("Añadir Etapas")
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+            cursor.execute("SELECT id, Nombre FROM prototipos")
+            resultados = cursor.fetchall()
+
+            try:
+                dialogo.addproto.clear()
+                dialogo.addproto.addItem("Ninguno", "NULL")
+
+                for id, nombre in resultados:
+                    dialogo.addproto.addItem(nombre, id)
+            except AttributeError as e:
+                print(f"Error al configurar 'addproto': {e}")
+                return
+
+        except Exception as e:
+            print(f"Error al cargar prototipos para relacionar: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    dialogo.addenviar.clicked.connect(dialogo.accept)
+
+    if dialogo.exec_() == QDialog.Accepted:
+        nombre = dialogo.addnombre.text().strip()
+        fecha_ini = dialogo.addini.text().strip()
+        fecha_fin = dialogo.addfin.text().strip()
+        estado = dialogo.addestado.currentText()
+        proto = dialogo.addproto.currentData()
+        proto_nombre = dialogo.addproto.currentText()
+
+        if proto == "NULL":
+            proto = None
+
+        try:
+            fecha_ini = datetime.datetime.strptime(fecha_ini, "%d/%m/%Y").strftime("%Y-%m-%d")
+            fecha_fin = datetime.datetime.strptime(fecha_fin, "%d/%m/%Y").strftime("%Y-%m-%d")
+        except ValueError as e:
+            print(f"Error al convertir fechas: {e}")
+            QMessageBox.warning(dialogo, "Error", "Las fechas deben estar en formato DD/MM/YYYY.")
+            return
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_insert = ("INSERT INTO etapas (nombre, fecha_inicio, fecha_fin, estado, id_protot) "
+                              "VALUES (%s, %s, %s, %s, %s)")
+                cursor.execute(sql_insert, (nombre, fecha_ini, fecha_fin, estado, proto))
+                conexion.commit()
+                etapas.append({"id": cursor.lastrowid, "nombre_proto": proto, "nombre": nombre, "fecha_ini": fecha_ini,
+                               "fecha_fin": fecha_fin, "estado": estado})
+                main_window.listetapas.addItem(f"{nombre} - {proto_nombre} - {fecha_ini} - {fecha_fin} - {estado}")
+                print(f"Etapas '{nombre}' añadido correctamente.")
+            except Exception as e:
+                print(f"Error al insertar el empleado en la base de datos: {e}")
+                QMessageBox.critical(dialogo, "Error", "No se pudo añadir el empleado.")
+            finally:
+                cursor.close()
+                conexion.close()
 
 def eliminar_gasto():
     global main_window
@@ -560,16 +628,13 @@ def editar_proto():
 
             nombre, fecha_inicio, fecha_fin, presupuesto, horas, id_proto_rel, descripcion = resultado
 
-            # Convertir fechas a cadenas
             fecha_inicio_str = fecha_inicio.strftime("%Y-%m-%d")
             fecha_fin_str = fecha_fin.strftime("%Y-%m-%d")
 
-            # Abrir diálogo para editar
             dialogo = QDialog()
             loadUi("formulario_proto.ui", dialogo)
             dialogo.setWindowTitle("Editar Prototipo")
 
-            # Prellenar los campos con la información actual
             dialogo.addnombre.setText(nombre)
             dialogo.addini.setDate(QtCore.QDate.fromString(fecha_inicio_str, "yyyy-MM-dd"))
             dialogo.addfin.setDate(QtCore.QDate.fromString(fecha_fin_str, "yyyy-MM-dd"))
@@ -577,7 +642,6 @@ def editar_proto():
             dialogo.addhoras.setValue(horas)
             dialogo.addDesc.setPlainText(descripcion)
 
-            # Cargar relaciones disponibles
             cursor.execute("SELECT id, Nombre FROM prototipos")
             resultados = cursor.fetchall()
 
@@ -586,7 +650,6 @@ def editar_proto():
             for id, nombre_rel in resultados:
                 dialogo.addrelacionan.addItem(nombre_rel, id)
 
-            # Seleccionar la relación actual
             for i in range(dialogo.addrelacionan.count()):
                 if dialogo.addrelacionan.itemData(i) == id_proto_rel:
                     dialogo.addrelacionan.setCurrentIndex(i)
@@ -607,18 +670,16 @@ def editar_proto():
                     QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
                     return
 
-                # Actualizar en la base de datos
                 sql_update = """
                     UPDATE prototipos
                     SET Nombre = %s, Fecha_inicio = %s, Fecha_fin = %s, Presupuesto = %s,
                         Horas_est = %s, id_proto_rel = %s, Descripcion = %s
                     WHERE id = %s
-                """
+                    """
                 cursor.execute(sql_update, (nuevo_nombre, nueva_fecha_inicio, nueva_fecha_fin, nuevo_presupuesto,
                                             nuevas_horas, nueva_relacion_id, nueva_descripcion, proto_id))
                 conexion.commit()
 
-                # Actualizar la lista local e interfaz
                 protos[current_item] = {
                     "nombre": nuevo_nombre,
                     "fecha_ini": nueva_fecha_inicio,
@@ -874,6 +935,7 @@ def abrir_ventana_etapas():
 
     main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
     main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    main_window.btnAddEtapas.clicked.connect(anadir_etapas)
     main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
 
     main_window.show()

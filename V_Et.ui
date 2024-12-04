@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>880</width>
-    <height>661</height>
+    <height>666</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -258,7 +258,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnDeleteEtapas">
+    <widget class="QPushButton" name="btnDelete">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -287,7 +287,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnEditEtapas">
+    <widget class="QPushButton" name="btnEdit">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -316,7 +316,7 @@ QPushButton:pressed {
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="btninspectEtapas">
+    <widget class="QPushButton" name="btninspect">
      <property name="geometry">
       <rect>
        <x>50</x>
