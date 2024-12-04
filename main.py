@@ -938,8 +938,8 @@ def editar_etapas():
                     break
 
             for i in range(dialogo.addestado.count()):
-                if dialogo.addestado.currentText(i) == estado:
-                    dialogo.addestado.setCurrentText(i)
+                if dialogo.addestado.itemText(i) == estado:
+                    dialogo.addestado.setCurrentText(estado)
                     break
 
             dialogo.addenviar.clicked.connect(dialogo.accept)
@@ -950,7 +950,7 @@ def editar_etapas():
                 nueva_fecha_fin = dialogo.addfin.date().toString("yyyy-MM-dd")
                 nueva_proto_id = dialogo.addproto.currentData()
                 proto_nombre = dialogo.addproto.currentText()
-                nuevo_estado = dialogo.addestado.currentData()
+                nuevo_estado = dialogo.addestado.currentText()
 
                 sql_update = """
                     UPDATE etapas
@@ -962,7 +962,7 @@ def editar_etapas():
 
                 etapas[current_item] = {
                     "id": id_etapa,
-                    "nombre_proto": nombre_proto,
+                    "nombre_proto": proto_nombre,
                     "nombre": nuevo_nombre,
                     "fecha_ini": nueva_fecha_inicio,
                     "fecha_fin": nueva_fecha_fin,
@@ -970,7 +970,7 @@ def editar_etapas():
                 }
 
                 main_window.listetapas.item(current_item).setText(
-                    f"{nuevo_nombre} - {nombre_proto} - {nueva_fecha_inicio} - {nueva_fecha_fin} - {estado}"
+                    f"{nuevo_nombre} - {proto_nombre} - {nueva_fecha_inicio} - {nueva_fecha_fin} - {nuevo_estado}"
                 )
 
                 print(f"Etapa '{nuevo_nombre}' actualizada correctamente.")
@@ -1115,7 +1115,7 @@ def inspeccionar_proto():
                 dialogo.LNombre.setText(f"Nombre: {nombre}")
                 dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
                 dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
-                dialogo.Lpresu.setText(f"Presupuesto: {presu}€")
+                dialogo.Lpresu.setText(f"Presupuesto: {presu}")
                 dialogo.Lhoras.setText(f"Horas estimadas: {horas}")
                 dialogo.Ldesc.setText(f"{descp}")
                 dialogo.Lrela.setText(f"Se relaciona: {relacion}")
@@ -1130,6 +1130,55 @@ def inspeccionar_proto():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def inspeccionar_etapas():
+    global main_window
+
+    current_item = main_window.listetapas.currentRow()
+    if current_item >= 0:
+        etapa = etapas[current_item]
+        id = etapa["id"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = (""" SELECT e.id, e.nombre, e.fecha_inicio, e.fecha_fin, e.estado, p.Nombre
+                                  FROM etapas AS e 
+                                  INNER JOIN prototipos AS p ON e.id_protot = p.id 
+                                  WHERE e.id = %s
+                                """)
+                cursor.execute(sql_select, (id,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
+                    return
+
+                id, nombre, fecha_ini, fecha_fin, estado, nombre_proto = resultado
+
+                if nombre_proto == None:
+                    relacion = "Prototipo no seleccionado"
+
+
+                dialogo = QDialog()
+                loadUi("inspeccionar_etapas.ui", dialogo)
+                dialogo.setWindowTitle("Inspeccionar Etapas")
+                dialogo.labelusu2.setText(f"Etapa seleccionada - {nombre}")
+                dialogo.LNombre.setText(f"Nombre: {nombre}")
+                dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
+                dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
+                dialogo.Lestado.setText(f"Estado: {estado}€")
+                dialogo.Lnombreproto.setText(f"Nombre prototipo: {nombre_proto}")
+                dialogo.exec_()
+
+            except Exception as e:
+                print(f"Error al obtener los datos del empleado: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo obtener los datos de la etapa.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
 def editar_telefono(dialogo, dni):
     current_item = dialogo.listTelefonos.currentRow()
@@ -1217,6 +1266,7 @@ def abrir_ventana_etapas():
     main_window.btnAddEtapas.clicked.connect(anadir_etapas)
     main_window.btnEditEtapas.clicked.connect(editar_etapas)
     main_window.btnDeleteEtapas.clicked.connect(eliminar_etapas)
+    main_window.btninspectEtapas.clicked.connect(inspeccionar_etapas)
 
     main_window.show()
 
