@@ -18,7 +18,8 @@ empleados = [
 
 gastos = []
 etapas = []
-protos=[]
+protos = []
+recursos = []
 
 app = None
 main_window = None
@@ -162,6 +163,43 @@ def configurar_ventana_etapas():
         main_window.btnAdd.setEnabled(False)
         main_window.btnDelete.setEnabled(False)
 
+def configurar_ventana_recursos():
+    global main_window, rol_actual, recursos
+
+    main_window.labelusu.setText(f"Bienvenido, {usuario_actual} ({rol_actual})")
+
+    recursos = []
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+
+            cursor.execute("SELECT id, nombre, descripcion, tipo FROM recursos")
+            resultados = cursor.fetchall()
+
+            recursos = [{"id": fila[0], "nombre": fila[1], "tipo": fila[3], "descripcion": fila[2]} for fila in resultados]
+
+            main_window.listrecursos.clear()
+            for recurso in recursos:
+                main_window.listrecursos.addItem(f"{recurso['id']} - {recurso['nombre']} - {recurso['tipo']} - descripcion: {recurso['descripcion']}")
+
+            print("Recursos cargados correctamente desde la base de datos.")
+        except Exception as e:
+            print(f"Error al cargar los prototipos: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    if rol_actual == "admin":
+        main_window.btnAddRecursos.setEnabled(True)
+        main_window.btnEditRecursos.setEnabled(True)
+        main_window.btnDeleteRecursos.setEnabled(True)
+    else:
+        main_window.btnAddRecursos.setEnabled(False)
+        main_window.btnDeleteRecursos.setEnabled(False)
+
+
+
 
 def configurar_ventana_proto():
     global main_window, rol_actual, protos
@@ -236,6 +274,66 @@ def anadir_empleado():
             finally:
                 cursor.close()
                 conexion.close()
+
+def anadir_recursos():
+    global main_window
+
+    dialogo = QDialog()
+    try:
+        loadUi("formulario_recursos.ui", dialogo)
+    except Exception as e:
+        print(f"Error al cargar el archivo .ui: {e}")
+        return
+
+    dialogo.setWindowTitle("Añadir recursos")
+    widgets = ["addnombre", "addtipo", "adddesc", "addenviar"]
+    for widget in widgets:
+        if not hasattr(dialogo, widget):
+            print(f"El formulario no contiene el widget: {widget}")
+            return
+    dialogo.addenviar.clicked.connect(dialogo.accept)
+
+    if dialogo.exec_() == QDialog.Accepted:
+        try:
+            # Recoger datos del formulario
+            nombre = dialogo.addnombre.text().strip()
+            tipo = dialogo.addtipo.text().strip()
+            descripcion = dialogo.adddesc.toPlainText().strip()
+
+            if not nombre or not tipo or not descripcion:
+                QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+                return
+
+            conexion = crear_conexion()
+            if conexion:
+                try:
+                    cursor = conexion.cursor()
+                    sql_insert = "INSERT INTO recursos (nombre, tipo, descripcion) VALUES (%s, %s, %s)"
+                    cursor.execute(sql_insert, (nombre, tipo, descripcion))
+                    conexion.commit()
+                    try:
+                        recursos.append({"id": cursor.lastrowid,"nombre": nombre, "tipo": tipo, "descripcion": descripcion})
+                        main_window.listrecursos.addItem(f"{nombre} - {tipo} - {descripcion}")
+                    except AttributeError as e:
+                        print(f"Error al actualizar la lista de recursos: {e}")
+                        QMessageBox.critical(dialogo, "Error", "No se pudo actualizar la lista local de recursos.")
+                        return
+                    print(f"Recurso '{nombre}' añadido correctamente.")
+                except Exception as e:
+                    print(f"Error al insertar en la base de datos: {e}")
+                    QMessageBox.critical(dialogo, "Error", f"No se pudo añadir el recurso. Detalles: {e}")
+                finally:
+                    cursor.close()
+                    conexion.close()
+            else:
+                print("Error: No se pudo conectar a la base de datos.")
+                QMessageBox.critical(dialogo, "Error", "No se pudo conectar a la base de datos.")
+
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+            QMessageBox.critical(dialogo, "Error", f"Ha ocurrido un error inesperado. Detalles: {e}")
+
+
 
 def anadir_gastos():
     global main_window
@@ -398,7 +496,54 @@ def eliminar_gasto():
                     print(f"Error al eliminar el empleado de la base de datos: {e}")
                 cursor.close()
                 conexion.close()
-                
+
+def eliminar_recurso():
+    global main_window
+
+    current_item = main_window.listrecursos.currentRow()
+    if current_item < 0:
+        QMessageBox.warning(main_window, "Error", "No se ha seleccionado ningún recurso.")
+        return
+
+    recurso = recursos[current_item]
+    id = recurso.get("id")
+    nombre = recurso.get("nombre", "Recurso desconocido")
+
+    respuesta = QMessageBox.question(
+        main_window,
+        "Confirmar eliminación",
+        f"¿Estás seguro de que deseas eliminar el recurso '{nombre}' con ID {id}?",
+        QMessageBox.Yes | QMessageBox.No
+    )
+
+    if respuesta == QMessageBox.Yes:
+        try:
+            recursos.pop(current_item)
+            main_window.listrecursos.takeItem(current_item)
+        except Exception as e:
+            print(f"Error al eliminar el recurso localmente: {e}")
+            QMessageBox.critical(main_window, "Error", "No se pudo actualizar la lista local.")
+            return
+
+        conexion = None
+        try:
+            conexion = crear_conexion()
+            if not conexion:
+                raise Exception("No se pudo conectar a la base de datos.")
+            cursor = conexion.cursor()
+            sql_delete = "DELETE FROM recursos WHERE id = %s"
+            cursor.execute(sql_delete, (id,))
+            conexion.commit()
+            print(f"Recurso '{id}' eliminado correctamente de la base de datos.")
+        except Exception as e:
+            print(f"Error al eliminar el recurso de la base de datos: {e}")
+            QMessageBox.critical(main_window, "Error", f"No se pudo eliminar el recurso. Detalles: {e}")
+        finally:
+            if conexion:
+                conexion.close()
+
+
+
 def eliminar_proto():
     global main_window
 
@@ -897,6 +1042,24 @@ def abrir_ventana_proto():
 
     main_window.show()
 
+def abrir_ventana_recursos():
+    global main_window
+
+    main_window = QMainWindow()
+    loadUi("V_R.ui", main_window)
+    main_window.setWindowTitle("Ventana Recursos")
+
+    configurar_ventana_recursos()
+
+    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    main_window.btnAddRecursos.clicked.connect(anadir_recursos)
+    main_window.btnDeleteRecursos.clicked.connect(eliminar_recurso)
+
+
+    main_window.show()
+
 def abrir_ventana_principal():
     global main_window
 
@@ -913,6 +1076,7 @@ def abrir_ventana_principal():
     main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
     main_window.btnProto.clicked.connect(abrir_ventana_proto)
     main_window.btnEtapas.clicked.connect(abrir_ventana_etapas)
+    main_window.btnRecursos.clicked.connect(abrir_ventana_recursos)
 
     main_window.show()
 
