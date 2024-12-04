@@ -380,7 +380,7 @@ background-color: rgb(92, 73, 61);</string>
      </widget>
     </widget>
    </widget>
-   <widget class="QPushButton" name="addetapainrecu">
+   <widget class="QPushButton" name="addEtapa">
     <property name="geometry">
      <rect>
       <x>670</x>
