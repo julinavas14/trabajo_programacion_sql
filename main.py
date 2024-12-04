@@ -28,6 +28,14 @@ usuario_actual = None
 rol_actual = None
 dni_actual = None
 
+def header():
+    global main_window
+    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
+    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    main_window.btnEtapas.clicked.connect(abrir_ventana_etapas)
+    main_window.btnRecursos.clicked.connect(abrir_ventana_recursos)
+
 def iniciar_sesion():
     global usuario_actual, rol_actual, main_window, login_window, dni_actual
 
@@ -549,7 +557,7 @@ def eliminar_gasto():
         )
 
         if respuesta == QMessageBox.Yes:
-            empleados.pop(current_item)
+            gastos.pop(current_item)
             main_window.listGastos.takeItem(current_item)
 
             conexion = crear_conexion()
@@ -560,6 +568,39 @@ def eliminar_gasto():
                     cursor.execute(sql_delete, (id,))
                     conexion.commit()
                     print(f"Empleado '{id}' eliminado correctamente de la base de datos.")
+                except Exception as e:
+                    print(f"Error al eliminar el empleado de la base de datos: {e}")
+                cursor.close()
+                conexion.close()
+
+def eliminar_etapas():
+    global main_window
+
+    current_item = main_window.listetapas.currentRow()
+
+    if current_item >= 0:
+        etapa = etapas[current_item]
+        id = etapa["id"]
+
+        respuesta = QMessageBox.question(
+            main_window,
+            "Confirmar eliminación",
+            f"¿Estás seguro de que deseas eliminar a {id}?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if respuesta == QMessageBox.Yes:
+            etapas.pop(current_item)
+            main_window.listetapas.takeItem(current_item)
+
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_delete = "DELETE FROM etapas WHERE id = %s"
+                    cursor.execute(sql_delete, (id,))
+                    conexion.commit()
+                    print(f"Etapa '{id}' eliminada correctamente de la base de datos.")
                 except Exception as e:
                     print(f"Error al eliminar el empleado de la base de datos: {e}")
                 cursor.close()
@@ -1063,8 +1104,7 @@ def abrir_ventana_gastos():
 
     configurar_ventana_gastos()
 
-    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
-    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    header()
 
     main_window.show()
 
@@ -1078,10 +1118,9 @@ def abrir_ventana_etapas():
 
     configurar_ventana_etapas()
 
-    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
-    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    header()
     main_window.btnAddEtapas.clicked.connect(anadir_etapas)
-    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+    main_window.btnDeleteEtapas.clicked.connect(eliminar_etapas)
 
     main_window.show()
 
@@ -1099,8 +1138,7 @@ def abrir_ventana_proto():
     main_window.btninspectProto.clicked.connect(inspeccionar_proto)
     main_window.btnDeleteProto.clicked.connect(eliminar_proto)
     main_window.btnAddProto.clicked.connect(anadir_proto)
-    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
-    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
+    header()
 
     main_window.show()
 
@@ -1113,9 +1151,7 @@ def abrir_ventana_recursos():
 
     configurar_ventana_recursos()
 
-    main_window.btnEmpleados.clicked.connect(abrir_ventana_principal)
-    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
-    main_window.btnProto.clicked.connect(abrir_ventana_proto)
+    header()
     main_window.btnAddRecursos.clicked.connect(anadir_recursos)
     main_window.btnDeleteRecursos.clicked.connect(eliminar_recurso)
 
@@ -1135,10 +1171,7 @@ def abrir_ventana_principal():
     main_window.btnEdit.clicked.connect(editar_empleado)
     main_window.btntlf.clicked.connect(anadir_telf)
     main_window.btninspect.clicked.connect(inspeccionar_empleado)
-    main_window.btnGastos.clicked.connect(abrir_ventana_gastos)
-    main_window.btnProto.clicked.connect(abrir_ventana_proto)
-    main_window.btnEtapas.clicked.connect(abrir_ventana_etapas)
-    main_window.btnRecursos.clicked.connect(abrir_ventana_recursos)
+    header()
 
     main_window.show()
 
