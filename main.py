@@ -305,7 +305,6 @@ def anadir_recursos():
 
     if dialogo.exec_() == QDialog.Accepted:
         try:
-            # Recoger datos del formulario
             nombre = dialogo.addnombre.text().strip()
             tipo = dialogo.addtipo.text().strip()
             descripcion = dialogo.adddesc.toPlainText().strip()
@@ -970,6 +969,102 @@ def editar_proto():
             cursor.close()
             conexion.close()
 
+def editar_etapas():
+    global main_window, etapas
+
+    current_item = main_window.listetapas.currentRow()
+    if current_item < 0 or current_item >= len(etapas):
+        QMessageBox.warning(main_window, "Error", "No se seleccionó una etapa válido.")
+        return
+
+    etapa = etapas[current_item]
+    id_etapa = etapa['id']
+
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+            sql_select = ("SELECT e.id, e.nombre, e.fecha_inicio, e.fecha_fin, e.estado, p.Nombre, e.id_protot "
+                          "FROM etapas AS e "
+                          "INNER JOIN prototipos AS p ON e.id_protot = p.id "
+                          "WHERE e.id = %s")
+            cursor.execute(sql_select, (id_etapa,))
+            resultado = cursor.fetchone()
+
+            if not resultado:
+                QMessageBox.warning(main_window, "Error", "No se encontraron datos de la etapa en la base de datos.")
+                return
+
+            id, nombre_etapa, fecha_inicio, fecha_fin, estado, nombre_proto, id_proto = resultado
+
+            fecha_inicio_str = fecha_inicio.strftime("%Y-%m-%d")
+            fecha_fin_str = fecha_fin.strftime("%Y-%m-%d")
+
+            dialogo = QDialog()
+            loadUi("formulario_etapas.ui", dialogo)
+            dialogo.setWindowTitle("Editar Etapa")
+
+            dialogo.addnombre.setText(nombre_etapa)
+            dialogo.addini.setDate(QtCore.QDate.fromString(fecha_inicio_str, "yyyy-MM-dd"))
+            dialogo.addfin.setDate(QtCore.QDate.fromString(fecha_fin_str, "yyyy-MM-dd"))
+
+            cursor.execute("SELECT id, Nombre FROM prototipos")
+            resultados = cursor.fetchall()
+
+            dialogo.addproto.clear()
+            dialogo.addproto.addItem("Ninguno", None)
+            for id, nombre_rel in resultados:
+                dialogo.addproto.addItem(nombre_rel, id)
+
+            for i in range(dialogo.addproto.count()):
+                if dialogo.addproto.itemData(i) == id_proto:
+                    dialogo.addproto.setCurrentIndex(i)
+                    break
+
+            for i in range(dialogo.addestado.count()):
+                if dialogo.addestado.itemText(i) == estado:
+                    dialogo.addestado.setCurrentText(estado)
+                    break
+
+            dialogo.addenviar.clicked.connect(dialogo.accept)
+
+            if dialogo.exec_() == QDialog.Accepted:
+                nuevo_nombre = dialogo.addnombre.text().strip()
+                nueva_fecha_inicio = dialogo.addini.date().toString("yyyy-MM-dd")
+                nueva_fecha_fin = dialogo.addfin.date().toString("yyyy-MM-dd")
+                nueva_proto_id = dialogo.addproto.currentData()
+                proto_nombre = dialogo.addproto.currentText()
+                nuevo_estado = dialogo.addestado.currentText()
+
+                sql_update = """
+                    UPDATE etapas
+                    SET nombre = %s, fecha_inicio = %s, fecha_fin = %s, estado = %s, id_protot = %s
+                    WHERE id = %s
+                    """
+                cursor.execute(sql_update, (nuevo_nombre, nueva_fecha_inicio, nueva_fecha_fin, nuevo_estado, nueva_proto_id, id_etapa))
+                conexion.commit()
+
+                etapas[current_item] = {
+                    "id": id_etapa,
+                    "nombre_proto": proto_nombre,
+                    "nombre": nuevo_nombre,
+                    "fecha_ini": nueva_fecha_inicio,
+                    "fecha_fin": nueva_fecha_fin,
+                    "estado": nuevo_estado,
+                }
+
+                main_window.listetapas.item(current_item).setText(
+                    f"{nuevo_nombre} - {proto_nombre} - {nueva_fecha_inicio} - {nueva_fecha_fin} - {nuevo_estado}"
+                )
+
+                print(f"Etapa '{nuevo_nombre}' actualizada correctamente.")
+        except Exception as e:
+            print(f"Error al actualizar la etapa: {e}")
+            QMessageBox.critical(main_window, "Error", "No se pudo actualizar la etapa.")
+        finally:
+            cursor.close()
+            conexion.close()
+
 def anadir_telf():
     global main_window, dni_actual
 
@@ -1181,6 +1276,55 @@ def inspeccionar_proto():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def inspeccionar_etapas():
+    global main_window
+
+    current_item = main_window.listetapas.currentRow()
+    if current_item >= 0:
+        etapa = etapas[current_item]
+        id = etapa["id"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = (""" SELECT e.id, e.nombre, e.fecha_inicio, e.fecha_fin, e.estado, p.Nombre
+                                  FROM etapas AS e 
+                                  INNER JOIN prototipos AS p ON e.id_protot = p.id 
+                                  WHERE e.id = %s
+                                """)
+                cursor.execute(sql_select, (id,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
+                    return
+
+                id, nombre, fecha_ini, fecha_fin, estado, nombre_proto = resultado
+
+                if nombre_proto == None:
+                    relacion = "Prototipo no seleccionado"
+
+
+                dialogo = QDialog()
+                loadUi("inspeccionar_etapas.ui", dialogo)
+                dialogo.setWindowTitle("Inspeccionar Etapas")
+                dialogo.labelusu2.setText(f"Etapa seleccionada - {nombre}")
+                dialogo.LNombre.setText(f"Nombre: {nombre}")
+                dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
+                dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
+                dialogo.Lestado.setText(f"Estado: {estado}")
+                dialogo.Lnombreproto.setText(f"Nombre prototipo: {nombre_proto}")
+                dialogo.exec_()
+
+            except Exception as e:
+                print(f"Error al obtener los datos del empleado: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo obtener los datos de la etapa.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
 def editar_telefono(dialogo, dni):
     current_item = dialogo.listTelefonos.currentRow()
@@ -1267,7 +1411,9 @@ def abrir_ventana_etapas():
 
     header()
     main_window.btnAddEtapas.clicked.connect(anadir_etapas)
+    main_window.btnEditEtapas.clicked.connect(editar_etapas)
     main_window.btnDeleteEtapas.clicked.connect(eliminar_etapas)
+    main_window.btninspectEtapas.clicked.connect(inspeccionar_etapas)
 
     main_window.show()
 
