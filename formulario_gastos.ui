@@ -90,7 +90,7 @@ QPushButton:disabled {
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="addempleado"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="dNILabel">
@@ -103,7 +103,7 @@ QPushButton:disabled {
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="addproto"/>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="titulaciNLabel">
@@ -116,7 +116,7 @@ QPushButton:disabled {
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QDateEdit" name="dateEdit"/>
+      <widget class="QDateEdit" name="addfecha"/>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="aOsDeExperienciaLabel">
@@ -128,7 +128,7 @@ QPushButton:disabled {
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="provinciaLabel">
        <property name="styleSheet">
         <string notr="true">font-weight: bold;</string>
@@ -138,18 +138,35 @@ QPushButton:disabled {
        </property>
       </widget>
      </item>
-     <item row="6" column="0" colspan="2">
-      <widget class="QPushButton" name="addenviar">
+     <item row="6" column="1">
+      <widget class="QTextEdit" name="adddesc"/>
+     </item>
+     <item row="4" column="1">
+      <widget class="QDoubleSpinBox" name="addimport">
+       <property name="maximum">
+        <double>20000.990000000001601</double>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0" colspan="2">
+      <widget class="QPushButton" name="addenviargastos">
        <property name="text">
         <string>Registrar Gasto</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
-      <widget class="QTextEdit" name="textEdit"/>
+     <item row="5" column="0">
+      <widget class="QLabel" name="lt">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Tipo:</string>
+       </property>
+      </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="addtipo"/>
      </item>
     </layout>
    </widget>

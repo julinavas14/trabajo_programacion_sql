@@ -344,43 +344,73 @@ def anadir_recursos():
             QMessageBox.critical(dialogo, "Error", f"Ha ocurrido un error inesperado. Detalles: {e}")
 
 
-
 def anadir_gastos():
-    global main_window
+    global main_window, gastos
+    gastos = []
 
     dialogo = QDialog()
     loadUi("formulario_gastos.ui", dialogo)
     dialogo.setWindowTitle("Añadir gastos")
 
+    conexion = crear_conexion()
+    if conexion:
+        cursor = conexion.cursor()
+        try:
+            cursor.execute("SELECT id, Nombre FROM prototipos")
+            resultados = cursor.fetchall()
+            dialogo.addproto.clear()
+            dialogo.addproto.addItem("Ninguno", "NULL")
+            for id, nombre in resultados:
+                dialogo.addproto.addItem(nombre, id)
+
+            cursor.execute("SELECT ID, nombre FROM empleados")
+            resultados = cursor.fetchall()
+            dialogo.addempleado.clear()
+            dialogo.addempleado.addItem("Ninguno", "NULL")
+            for id, nombre in resultados:
+                dialogo.addempleado.addItem(nombre, id)
+        except Exception as e:
+            print(f"Error al cargar datos: {e}")
+        finally:
+            cursor.close()
+            conexion.close()
+
+    dialogo.addenviargastos.clicked.connect(dialogo.accept)
+
     if dialogo.exec_() == QDialog.Accepted:
-        empleados = dialogo.addempleados.text().strip()
-        prototipos = dialogo.addproto.text().strip()
-        fecha = dialogo.addfecha.date().strip()
-        importe = dialogo.addimport.int().strip()
-        descripcion = dialogo.adddesc.text().strip()
+        try:
+            empleados = dialogo.addempleado.currentData()
+            prototipos = dialogo.addproto.currentData()
+            fecha = dialogo.addfecha.date().toString("yyyy-MM-dd")
+            importe = float(dialogo.addimport.text().strip().replace(',', '.'))
+            descripcion = dialogo.adddesc.toPlainText().strip()
+            tipo = dialogo.addtipo.text().strip()
+            if not empleados or not prototipos or not fecha or not importe or not descripcion:
+                QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+                return
 
-        if not empleados or not prototipos or not fecha or not importe or not descripcion:
-            QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
-            return
 
-        gastos.append({"empleados": empleados, "prototipos": prototipos, "fecha": fecha, "importe": importe})
-        main_window.listgastos.addItem(f"{empleados} - {prototipos} - {importe}")
+            conexion = crear_conexion()
+            if conexion:
+                cursor = conexion.cursor()
+                try:
+                    sql_insert = ("INSERT INTO gastos (id_emp, id_proto, fecha, importe, descripcion, tipo) "
+                                  "VALUES (%s, %s, %s, %s, %s, %s)")
+                    cursor.execute(sql_insert, (empleados, prototipos, fecha, importe, descripcion, tipo))
+                    conexion.commit()
+                    gastos.append({"empleado": empleados, "proto": prototipos, "desc": descripcion, "fecha": fecha, "importe": importe, "tipo": tipo, "id": cursor.lastrowid})
+                    main_window.listgastos.addItem(f"{empleados} - {prototipos} - {descripcion} - {fecha} - {importe}€")
 
-        conexion = crear_conexion()
-        if conexion:
-            cursor = conexion.cursor()
-            try:
-                sql_insert = ("INSERT INTO gastos (empleado, prototipo, fecha, importe, descripcion) "
-                              "VALUES (%s, %s, %s, %s, %s)")
-                cursor.execute(sql_insert, (empleados, prototipos, fecha, importe, descripcion))
-                conexion.commit()
-                print(f"Gastos de '{empleados}' añadido correctamente.")
-            except Exception as e:
-                print(f"Error al insertar el empleado en la base de datos: {e}")
-                QMessageBox.critical(dialogo, "Error", "No se pudo añadir el empleado.")
-            finally:
-                cursor.close()
-                conexion.close()
+                    print(f"Gasto de '{empleados}' añadido correctamente.")
+                except Exception as e:
+                    print(f"Error al insertar en la base de datos: {e}")
+                    QMessageBox.critical(dialogo, "Error", "No se pudo añadir el gasto.")
+                finally:
+                    cursor.close()
+                    conexion.close()
+        except Exception as e:
+            print(f"Error al procesar el formulario: {e}")
+
 
 def anadir_proto():
     global main_window, protos
@@ -785,6 +815,60 @@ def editar_empleado():
                 cursor.close()
                 conexion.close()
 
+def editar_recursos():
+    global main_window
+
+    current_item = main_window.listrecursos.currentRow()
+    if current_item >= 0:
+        recurso = recursos[current_item]
+        id = recurso["id"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select = "SELECT id, nombre, tipo, descripcion FROM recursos WHERE id = %s"
+                cursor.execute(sql_select, (id,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del recurso en la base de datos.")
+                    return
+
+                id, nombre, tipo, descripcion = resultado
+
+                dialogo = QDialog()
+                loadUi("formulario_recursos.ui", dialogo)
+                dialogo.setWindowTitle("Editar recurso")
+
+                dialogo.addnombre.setText(nombre)
+                dialogo.addtipo.setText(tipo)
+                dialogo.adddesc.setText(descripcion)
+                dialogo.addenviar.clicked.connect(dialogo.accept)
+
+                if dialogo.exec_() == QDialog.Accepted:
+                    nuevo_nombre = dialogo.addnombre.text().strip()
+                    nuevo_tipo = dialogo.addtipo.text().strip()
+                    nuevo_desc = dialogo.adddesc.toPlainText().strip()
+
+                    if not nuevo_nombre or not nuevo_tipo or not nuevo_desc:
+                        QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
+                        return
+
+                    recursos[current_item] = {"id": id, "nombre": nuevo_nombre, "tipo": nuevo_tipo, "descripcion": nuevo_desc}
+                    main_window.listrecursos.item(current_item).setText(f"{nuevo_nombre} - {nuevo_tipo} - {nuevo_desc}")
+
+                    sql_update = "UPDATE recursos SET nombre = %s, tipo = %s, descripcion = %s WHERE id = %s"
+                    cursor.execute(sql_update, (nuevo_nombre, nuevo_tipo, nuevo_desc, id))
+                    conexion.commit()
+                    print(f"Recurso con nombre {nuevo_nombre} actualizado correctamente.")
+            except Exception as e:
+                print(f"Error al actualizar los datos del recurso: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo editar el recurso.")
+            finally:
+                cursor.close()
+                conexion.close()
+
 def editar_proto():
     global main_window, protos
 
@@ -987,6 +1071,68 @@ def inspeccionar_empleado():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def inspeccionar_recursos():
+    global main_window
+
+    # Verificar selección en la lista
+    current_item = main_window.listrecursos.currentRow()
+    if current_item < 0:
+        QMessageBox.warning(main_window, "Error", "No se ha seleccionado ningún recurso.")
+        return
+
+    if not isinstance(recursos, list) or current_item >= len(recursos):
+        QMessageBox.critical(main_window, "Error", "El recurso seleccionado no existe.")
+        return
+
+    recurso = recursos[current_item]
+    id = recurso.get("id")
+    nombre = recurso.get("nombre", "Desconocido")
+    tipo = recurso.get("tipo", "Desconocido")
+
+    if rol_actual == "user" and dni_actual != id:
+        QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes inspeccionar tu propio perfil.")
+        return
+
+    conexion = crear_conexion()
+    if not conexion:
+        QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+        return
+
+    try:
+        cursor = conexion.cursor()
+        sql_select = "SELECT nombre, tipo, descripcion FROM recursos WHERE id = %s"
+        cursor.execute(sql_select, (id,))
+        resultado = cursor.fetchone()
+
+        if not resultado:
+            QMessageBox.warning(main_window, "Error", "No se encontraron datos del recurso en la base de datos.")
+            return
+
+        nombre, tipo, descripcion = resultado
+        dialogo = QDialog()
+        try:
+            loadUi("inspeccionar_recursos.ui", dialogo)
+        except Exception as e:
+            print(f"Error al cargar la interfaz: {e}")
+            QMessageBox.critical(main_window, "Error", f"No se pudo cargar la interfaz. Detalles: {e}")
+            return
+
+        dialogo.setWindowTitle("Inspeccionar recursos")
+        dialogo.labelusu2.setText(f"Recurso seleccionado - {nombre}")
+        dialogo.LNombre.setText(f"Nombre: {nombre}")
+        dialogo.LTipo.setText(f"Tipo: {tipo}")
+        dialogo.LDesc.setText(f"{descripcion}")
+
+        dialogo.exec_()
+
+    except Exception as e:
+        print(f"Error al obtener los datos del recurso: {e}")
+        QMessageBox.critical(main_window, "Error", f"No se pudo obtener los datos del recurso. Detalles: {e}")
+    finally:
+        cursor.close()
+        conexion.close()
+
+
 def inspeccionar_proto():
     global main_window
 
@@ -1103,6 +1249,7 @@ def abrir_ventana_gastos():
     main_window.setWindowTitle("Ventana Gastos")
 
     configurar_ventana_gastos()
+    main_window.btnAddGastos.clicked.connect(anadir_gastos)
 
     header()
 
@@ -1154,6 +1301,8 @@ def abrir_ventana_recursos():
     header()
     main_window.btnAddRecursos.clicked.connect(anadir_recursos)
     main_window.btnDeleteRecursos.clicked.connect(eliminar_recurso)
+    main_window.btninspectRecursos.clicked.connect(inspeccionar_recursos)
+    main_window.btnEditRecursos.clicked.connect(editar_recursos)
 
 
     main_window.show()
