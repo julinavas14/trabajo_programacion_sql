@@ -1115,7 +1115,7 @@ def inspeccionar_proto():
                 dialogo.LNombre.setText(f"Nombre: {nombre}")
                 dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
                 dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
-                dialogo.Lpresu.setText(f"Presupuesto: {presu}")
+                dialogo.Lpresu.setText(f"Presupuesto: {presu}€")
                 dialogo.Lhoras.setText(f"Horas estimadas: {horas}")
                 dialogo.Ldesc.setText(f"{descp}")
                 dialogo.Lrela.setText(f"Se relaciona: {relacion}")
@@ -1167,7 +1167,7 @@ def inspeccionar_etapas():
                 dialogo.LNombre.setText(f"Nombre: {nombre}")
                 dialogo.Lini.setText(f"Fecha inicio: {fecha_ini}")
                 dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
-                dialogo.Lestado.setText(f"Estado: {estado}€")
+                dialogo.Lestado.setText(f"Estado: {estado}")
                 dialogo.Lnombreproto.setText(f"Nombre prototipo: {nombre_proto}")
                 dialogo.exec_()
 
