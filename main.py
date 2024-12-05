@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog, QTableWidgetItem
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog, QVBoxLayout, QLabel,QComboBox, QDialogButtonBox
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
@@ -573,47 +573,6 @@ def anadir_etapas():
                 cursor.close()
                 conexion.close()
 
-def anadir_etapa_recursos():
-    global main_window
-
-    current_item = main_window.listetapas.currentRow()
-    if current_item >= 0:
-        etapa = etapas[current_item]
-        id = etapa["id"]
-
-        conexion = crear_conexion()
-        if conexion:
-            cursor = conexion.cursor()
-            try:
-                sql_select_id = "SELECT ID FROM etapas WHERE id = %s"
-                cursor.execute(sql_select_id, (id,))
-                resultado = cursor.fetchone()
-
-                if not resultado:
-                    QMessageBox.warning(main_window, "Error", "No se encontró el empleado en la base de datos.")
-                    return
-
-                id_empleado = resultado[0]
-
-                telefono, ok = QInputDialog.getText(main_window, "Añadir Teléfono",
-                                                    "Introduce el teléfono (9 dígitos):")
-                if not ok or not telefono.isdigit() or len(telefono) != 9:
-                    QMessageBox.warning(main_window, "Error", "Teléfono inválido. Debe ser un número de 9 dígitos.")
-                    return
-
-                sql_insert_telf = "INSERT INTO telf_empleados (id_empleado, telf) VALUES (%s, %s)"
-                cursor.execute(sql_insert_telf, (id_empleado, telefono))
-                conexion.commit()
-                print(f"Teléfono {telefono} añadido correctamente para el empleado con ID {id_empleado}.")
-                QMessageBox.information(main_window, "Éxito", f"Teléfono {telefono} añadido correctamente.")
-            except Exception as e:
-                print(f"Error al añadir el teléfono: {e}")
-                QMessageBox.critical(main_window, "Error", "No se pudo añadir el teléfono.")
-            finally:
-                cursor.close()
-                conexion.close()
-        else:
-            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
 def eliminar_gasto():
     global main_window
@@ -1524,6 +1483,79 @@ def inspeccionar_etapas():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
+def anadir_etapa_recurso():
+    global main_window
+
+    dialogo = QDialog()
+    try:
+        loadUi("formulario_etapa_recurso.ui", dialogo)
+    except Exception as e:
+        print(f"Error al cargar el formulario: {e}")
+        QMessageBox.critical(main_window, "Error", "No se pudo cargar el formulario.")
+        return
+
+    dialogo.setWindowTitle("Asignar Recurso a Etapa")
+
+    conexion = crear_conexion()
+    if not conexion:
+        QMessageBox.critical(dialogo, "Error", "No se pudo conectar a la base de datos.")
+        return
+
+    try:
+        cursor = conexion.cursor()
+
+        cursor.execute("SELECT id, nombre FROM etapas")
+        etapas = cursor.fetchall()
+        dialogo.comboEtapas.clear()
+        for id_etapa, nombre_etapa in etapas:
+            dialogo.comboEtapas.addItem(nombre_etapa, id_etapa)
+
+        cursor.execute("SELECT id, nombre FROM recursos")
+        recursos = cursor.fetchall()
+        dialogo.comboRecursos.clear()
+        for id_recurso, nombre_recurso in recursos:
+            dialogo.comboRecursos.addItem(nombre_recurso, id_recurso)
+
+    except Exception as e:
+        print(f"Error al cargar datos de la base de datos: {e}")
+        QMessageBox.critical(dialogo, "Error", "No se pudieron cargar los datos.")
+        return
+    finally:
+        cursor.close()
+        conexion.close()
+
+    dialogo.btnEnviar.clicked.connect(lambda: guardar_asignacion(dialogo))
+
+    dialogo.exec_()
+
+def guardar_asignacion(dialogo):
+    id_etapa = dialogo.comboEtapas.currentData()
+    id_recurso = dialogo.comboRecursos.currentData()
+
+    if not id_etapa or not id_recurso:
+        QMessageBox.warning(dialogo, "Error", "Debe seleccionar una etapa y un recurso.")
+        return
+
+    conexion = crear_conexion()
+    if not conexion:
+        QMessageBox.critical(dialogo, "Error", "No se pudo conectar a la base de datos.")
+        return
+
+    try:
+        cursor = conexion.cursor()
+        sql_insert = "INSERT INTO se_asignan (id_etapas, id_recursos) VALUES (%s, %s)"
+        cursor.execute(sql_insert, (id_etapa, id_recurso))
+        conexion.commit()
+        QMessageBox.information(dialogo, "Éxito", "La asignación se ha guardado correctamente.")
+        dialogo.accept()
+    except Exception as e:
+        print(f"Error al guardar la asignación: {e}")
+        QMessageBox.critical(dialogo, "Error", "No se pudo guardar la asignación.")
+    finally:
+        cursor.close()
+        conexion.close()
+
+
 def editar_telefono(dialogo, dni):
     current_item = dialogo.listTelefonos.currentRow()
     if current_item >= 0:
@@ -1611,6 +1643,7 @@ def abrir_ventana_etapas():
     configurar_ventana_etapas()
 
     header()
+    main_window.btnRecur.clicked.connect(anadir_etapa_recurso)
     main_window.btnAddEtapas.clicked.connect(anadir_etapas)
     main_window.btnEditEtapas.clicked.connect(editar_etapas)
     main_window.btnDeleteEtapas.clicked.connect(eliminar_etapas)
