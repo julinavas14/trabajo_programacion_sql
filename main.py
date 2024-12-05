@@ -861,65 +861,104 @@ def editar_empleado():
                 conexion.close()
 
 def editar_gastos():
-    global main_window, gastos, rol_actual, dni_actual
+    global main_window, gastos
 
     current_item = main_window.listgastos.currentRow()
-    print(f"Índice seleccionado: {current_item}")
     if current_item >= 0:
         gasto = gastos[current_item]
-        print(f"Gasto seleccionado: {gasto}")
-        dni_empleado = gasto.get("DNI")
-
-        # Verificar permisos
-        if rol_actual == "user" and dni_actual != dni_empleado:
-            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes editar tu propio perfil.")
-            return
 
         conexion = crear_conexion()
-        if conexion:
-            cursor = conexion.cursor()
-            try:
-                # Consulta para obtener los datos actuales del gasto
-                print("Ejecutando consulta SELECT...")
-                sql_select = "SELECT id_emp, id_proto, fecha, importe, tipo, descripcion FROM gastos WHERE id = %s"
-                cursor.execute(sql_select, (gasto["id"],))
-                resultado = cursor.fetchone()
-                print(f"Resultado de SELECT: {resultado}")
+        if not conexion:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+            return
 
-                if not resultado:
-                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del gasto en la base de datos.")
+        cursor = conexion.cursor()
+        try:
+            sql_select = "SELECT id_emp, id_proto, fecha, importe, tipo, descripcion FROM gastos WHERE id = %s"
+            cursor.execute(sql_select, (gasto["id"],))
+            resultado = cursor.fetchone()
+
+            if not resultado:
+                QMessageBox.warning(main_window, "Error", "No se encontraron datos del gasto en la base de datos.")
+                return
+
+            id_emp, id_proto, fecha, importe, tipo, descripcion = resultado
+
+            dialogo = QDialog()
+            loadUi("formulario_gastos.ui", dialogo)
+            dialogo.setWindowTitle("Editar Gasto")
+
+            cursor.execute("SELECT ID, nombre FROM empleados")
+            empleados = cursor.fetchall()
+            dialogo.addempleado.clear()
+            for emp_id, nombre in empleados:
+                dialogo.addempleado.addItem(nombre, emp_id)
+
+            for i in range(dialogo.addempleado.count()):
+                if dialogo.addempleado.itemData(i) == id_emp:
+                    dialogo.addempleado.setCurrentIndex(i)
+                    break
+
+            cursor.execute("SELECT id, Nombre FROM prototipos")
+            prototipos = cursor.fetchall()
+            dialogo.addproto.clear()
+            for proto_id, nombre in prototipos:
+                dialogo.addproto.addItem(nombre, proto_id)
+
+            for i in range(dialogo.addproto.count()):
+                if dialogo.addproto.itemData(i) == id_proto:
+                    dialogo.addproto.setCurrentIndex(i)
+                    break
+
+            if isinstance(fecha, datetime.date):
+                dialogo.addfecha.setDate(QDate.fromString(fecha.strftime("%Y-%m-%d"), "yyyy-MM-dd"))
+            dialogo.addimport.setValue(float(importe))
+            dialogo.addtipo.setText(tipo)
+            dialogo.adddesc.setPlainText(descripcion)
+
+            if dialogo.exec_() == QDialog.Accepted:
+                nuevo_emp_id = dialogo.addempleado.currentData()
+                nuevo_proto_id = dialogo.addproto.currentData()
+                nueva_fecha = dialogo.addfecha.date().toString("yyyy-MM-dd")
+                nuevo_importe = dialogo.addimport.value()
+                nuevo_tipo = dialogo.addtipo.text().strip()
+                nueva_descripcion = dialogo.adddesc.toPlainText().strip()
+
+                if not nuevo_tipo or not nueva_descripcion:
+                    QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
                     return
 
-                id_emp, id_proto, fecha, importe, tipo, descripcion = resultado
+                sql_update = """
+                    UPDATE gastos
+                    SET id_emp = %s, id_proto = %s, fecha = %s, importe = %s, tipo = %s, descripcion = %s
+                    WHERE id = %s
+                """
+                cursor.execute(sql_update, (
+                    nuevo_emp_id, nuevo_proto_id, nueva_fecha, nuevo_importe, nuevo_tipo, nueva_descripcion, gasto["id"]
+                ))
+                conexion.commit()
 
-                # Crear diálogo para edición
-                dialogo = QDialog()
-                loadUi("formulario_gastos.ui", dialogo)
-                dialogo.setWindowTitle("Editar gastos")
+                gastos[current_item] = {
+                    "empleado": dialogo.addempleado.currentText(),
+                    "proto": dialogo.addproto.currentText(),
+                    "desc": nueva_descripcion,
+                    "fecha": nueva_fecha,
+                    "importe": nuevo_importe,
+                    "tipo": nuevo_tipo,
+                    "id": gasto["id"]
+                }
+                main_window.listgastos.item(current_item).setText(
+                    f"{dialogo.addempleado.currentText()} - {dialogo.addproto.currentText()} - {nueva_descripcion} - {nueva_fecha} - {nuevo_importe}€"
+                )
 
-                # Convertir fecha (datetime.date) a string en formato 'yyyy-MM-dd'
-                if isinstance(fecha, datetime.date):  # Verifica que es un objeto datetime.date
-                    fecha_str = fecha.strftime("%Y-%m-%d")  # Convierte a string
+                print(f"Gasto con ID {gasto['id']} actualizado correctamente.")
 
-                # Configurar valores actuales en el formulario
-                dialogo.addempleado.setCurrentText(str(id_emp))
-                dialogo.addproto.setCurrentText(str(id_proto))
-                dialogo.addfecha.setDate(QDate.fromString(fecha_str, "yyyy-MM-dd"))  # Usa la cadena de texto
-                dialogo.addimport.setText(f"{importe:.2f}")
-                dialogo.addtipo.setText(tipo)
-                dialogo.adddesc.setPlainText(descripcion)
-
-                if dialogo.exec_() == QDialog.Accepted:
-                    print("Formulario aceptado.")
-                    # Validaciones y actualización
-                    # ...
-                    print("Datos actualizados correctamente.")
-            except Exception as e:
-                print(f"Error al actualizar los datos del gasto: {e}")
-                QMessageBox.critical(main_window, "Error", "No se pudo editar el gasto.")
-            finally:
-                cursor.close()
-                conexion.close()
+        except Exception as e:
+            print(f"Error al editar el gasto: {e}")
+            QMessageBox.critical(main_window, "Error", "No se pudo editar el gasto.")
+        finally:
+            cursor.close()
+            conexion.close()
 
 def editar_recursos():
     global main_window
