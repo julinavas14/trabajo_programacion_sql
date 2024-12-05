@@ -50,14 +50,15 @@ text-align: center;
      </rect>
     </property>
     <layout class="QGridLayout" name="gridins">
-     <item row="0" column="1">
-      <widget class="QLabel" name="Limport">
+     <item row="0" column="0">
+      <widget class="QLabel" name="LNombre">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(92, 73, 61);
+color:white;
 font-size: 15px;</string>
        </property>
        <property name="text">
-        <string>Importe:</string>
+        <string>Nombre:</string>
        </property>
       </widget>
      </item>
@@ -84,15 +85,14 @@ font-size: 15px;</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="LNombre">
+     <item row="0" column="1">
+      <widget class="QLabel" name="Limport">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(92, 73, 61);
-color:white;
 font-size: 15px;</string>
        </property>
        <property name="text">
-        <string>   Nombre:</string>
+        <string>Importe:</string>
        </property>
       </widget>
      </item>
@@ -109,14 +109,21 @@ font-size: 15px;</string>
          <rect>
           <x>10</x>
           <y>20</y>
-          <width>481</width>
-          <height>51</height>
+          <width>241</width>
+          <height>71</height>
          </rect>
         </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
        </widget>
+      </widget>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QLabel" name="Lproto">
+       <property name="text">
+        <string>Nombre del protoripo: </string>
+       </property>
       </widget>
      </item>
     </layout>
@@ -156,7 +163,7 @@ border-radius: 10px;</string>
 border-color: transparent;</string>
     </property>
     <property name="text">
-     <string>Prototipo seleccionado - </string>
+     <string>Gasto seleccionado - </string>
     </property>
    </widget>
   </widget>

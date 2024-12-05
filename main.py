@@ -573,6 +573,48 @@ def anadir_etapas():
                 cursor.close()
                 conexion.close()
 
+def anadir_etapa_recursos():
+    global main_window
+
+    current_item = main_window.listetapas.currentRow()
+    if current_item >= 0:
+        etapa = etapas[current_item]
+        id = etapa["id"]
+
+        conexion = crear_conexion()
+        if conexion:
+            cursor = conexion.cursor()
+            try:
+                sql_select_id = "SELECT ID FROM etapas WHERE id = %s"
+                cursor.execute(sql_select_id, (id,))
+                resultado = cursor.fetchone()
+
+                if not resultado:
+                    QMessageBox.warning(main_window, "Error", "No se encontró el empleado en la base de datos.")
+                    return
+
+                id_empleado = resultado[0]
+
+                telefono, ok = QInputDialog.getText(main_window, "Añadir Teléfono",
+                                                    "Introduce el teléfono (9 dígitos):")
+                if not ok or not telefono.isdigit() or len(telefono) != 9:
+                    QMessageBox.warning(main_window, "Error", "Teléfono inválido. Debe ser un número de 9 dígitos.")
+                    return
+
+                sql_insert_telf = "INSERT INTO telf_empleados (id_empleado, telf) VALUES (%s, %s)"
+                cursor.execute(sql_insert_telf, (id_empleado, telefono))
+                conexion.commit()
+                print(f"Teléfono {telefono} añadido correctamente para el empleado con ID {id_empleado}.")
+                QMessageBox.information(main_window, "Éxito", f"Teléfono {telefono} añadido correctamente.")
+            except Exception as e:
+                print(f"Error al añadir el teléfono: {e}")
+                QMessageBox.critical(main_window, "Error", "No se pudo añadir el teléfono.")
+            finally:
+                cursor.close()
+                conexion.close()
+        else:
+            QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+
 def eliminar_gasto():
     global main_window
 
@@ -1232,22 +1274,25 @@ def inspeccionar_empleado():
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
 def inspeccionar_gastos():
-    global main_window, gastos, rol_actual, dni_actual
+    global main_window, gastos
 
     current_item = main_window.listgastos.currentRow()
+    if current_item < 0:
+        QMessageBox.warning(main_window, "Error", "No se ha seleccionado ningún recurso.")
+        return
     if current_item >= 0:
         gasto = gastos[current_item]
         dni = gasto["id"]
-
-        if rol_actual == "user" and dni_actual != dni:
-            QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes inspeccionar tu propio perfil.")
-            return
 
         conexion = crear_conexion()
         if conexion:
             cursor = conexion.cursor()
             try:
-                sql_select = "SELECT id_emp, id_proto, fecha, importe, tipo, descripcion FROM gastos WHERE id = %s"
+                sql_select = ("SELECT e.nombre, p.Nombre, g.fecha, g.importe, g.tipo, g.descripcion "
+                              "FROM gastos AS g "
+                              "INNER JOIN empleados AS e ON id_emp = e.ID "
+                              "INNER JOIN prototipos AS p ON id_proto = p.id "
+                              "WHERE g.id = %s")
                 cursor.execute(sql_select, (dni,))
                 resultado = cursor.fetchone()
 
@@ -1263,6 +1308,7 @@ def inspeccionar_gastos():
 
                 dialogo.labelusu2.setText(f"Gasto seleccionado - ID: {dni}")
                 dialogo.LNombre.setText(f"Empleado: {id_emp}")
+                dialogo.Lproto.setText(f"Nombre del prototipo: {id_proto}")
                 dialogo.Limport.setText(f"Importe: {importe:.2f}€")
                 dialogo.Lfecha.setText(f"Fecha: {fecha}")
                 dialogo.Ltipo.setText(f"Tipo: {tipo}")
@@ -1283,7 +1329,6 @@ def inspeccionar_gastos():
 def inspeccionar_recursos():
     global main_window
 
-    # Verificar selección en la lista
     current_item = main_window.listrecursos.currentRow()
     if current_item < 0:
         QMessageBox.warning(main_window, "Error", "No se ha seleccionado ningún recurso.")
