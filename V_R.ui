@@ -98,6 +98,9 @@ QPushButton:pressed {
        <height>71</height>
       </rect>
      </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
       <string notr="true">color:black;</string>
      </property>
@@ -114,6 +117,9 @@ QPushButton:pressed {
        <height>71</height>
       </rect>
      </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="styleSheet">
       <string notr="true">color:black;</string>
      </property>
@@ -129,6 +135,9 @@ QPushButton:pressed {
        <width>161</width>
        <height>71</height>
       </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="styleSheet">
       <string notr="true">color:black;</string>
