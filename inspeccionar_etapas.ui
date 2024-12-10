@@ -72,18 +72,6 @@ font-size: 15px;</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="Lini">
-       <property name="styleSheet">
-        <string notr="true">color:white;
-background-color: rgb(92, 73, 61);
-font-size: 15px;</string>
-       </property>
-       <property name="text">
-        <string>   Fecha inicio:</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="LNombre">
        <property name="styleSheet">
@@ -96,7 +84,7 @@ font-size: 15px;</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="2">
+     <item row="4" column="0" colspan="2">
       <widget class="QLabel" name="Lnombreproto">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(92, 73, 61);
@@ -105,6 +93,41 @@ font-size: 15px;</string>
        <property name="text">
         <string>   Nombre prototipo:</string>
        </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="Lini">
+       <property name="styleSheet">
+        <string notr="true">color:white;
+background-color: rgb(92, 73, 61);
+font-size: 15px;</string>
+       </property>
+       <property name="text">
+        <string>   Fecha inicio:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="styleSheet">
+        <string notr="true">font-size:15px;</string>
+       </property>
+       <property name="title">
+        <string>Recursos asignados:</string>
+       </property>
+       <widget class="QLabel" name="LRecursos">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>491</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>

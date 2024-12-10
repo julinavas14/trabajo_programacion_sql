@@ -517,13 +517,19 @@ def anadir_etapas():
         try:
             cursor.execute("SELECT id, Nombre FROM prototipos")
             resultados = cursor.fetchall()
+            cursor.execute("SELECT id, nombre FROM RECURSOS")
+            resultados2 = cursor.fetchall()
 
             try:
                 dialogo.addproto.clear()
                 dialogo.addproto.addItem("Ninguno", "NULL")
+                dialogo.addrecurso.clear()
+                dialogo.addrecurso.addItem("Ninguno", "NULL")
 
                 for id, nombre in resultados:
                     dialogo.addproto.addItem(nombre, id)
+                for id, nombre in resultados2:
+                    dialogo.addrecurso.addItem(nombre, id)
             except AttributeError as e:
                 print(f"Error al configurar 'addproto': {e}")
                 return
@@ -541,11 +547,14 @@ def anadir_etapas():
         fecha_ini = dialogo.addini.text().strip()
         fecha_fin = dialogo.addfin.text().strip()
         estado = dialogo.addestado.currentText()
+        recurso_nombre = dialogo.addrecurso.currentText()
+        recurso_id = dialogo.addrecurso.currentData()
         proto = dialogo.addproto.currentData()
         proto_nombre = dialogo.addproto.currentText()
 
-        if proto == "NULL":
-            proto = None
+        if proto == "NULL" or recurso_id == "NULL":
+            QMessageBox.warning(dialogo, "Error", "Debes seleccionar un prototipo y un recurso.")
+            return
 
         try:
             fecha_ini = datetime.datetime.strptime(fecha_ini, "%d/%m/%Y").strftime("%Y-%m-%d")
@@ -562,9 +571,16 @@ def anadir_etapas():
                               "VALUES (%s, %s, %s, %s, %s)")
                 cursor.execute(sql_insert, (nombre, fecha_ini, fecha_fin, estado, proto))
                 conexion.commit()
+                id_etapa = cursor.lastrowid
                 etapas.append({"id": cursor.lastrowid, "nombre_proto": proto, "nombre": nombre, "fecha_ini": fecha_ini,
                                "fecha_fin": fecha_fin, "estado": estado})
                 main_window.listetapas.addItem(f"{nombre} - {proto_nombre} - {fecha_ini} - {fecha_fin} - {estado}")
+                try:
+                    sql_insert2 = "INSERT INTO se_asignan (id_recursos, id_etapas) VALUES (%s, %s)"
+                    cursor.execute(sql_insert2, (recurso_id, id_etapa))
+                    conexion.commit()
+                except Exception as e:
+                    print(f"Error al insertar el recurso en la base de datos: {e}")
                 print(f"Etapas '{nombre}' añadido correctamente.")
             except Exception as e:
                 print(f"Error al insertar el empleado en la base de datos: {e}")
@@ -573,6 +589,86 @@ def anadir_etapas():
                 cursor.close()
                 conexion.close()
 
+def anadir_etapa_recurso():
+    global main_window
+
+    dialogo = QDialog()
+    try:
+        loadUi("formulario_recurso_etapa.ui", dialogo)
+    except Exception as e:
+        print(f"Error al cargar el archivo .ui: {e}")
+        QMessageBox.critical(main_window, "Error", "No se pudo cargar el formulario de recursos/etapas.")
+        return
+
+    dialogo.setWindowTitle("Añadir Recurso/Etapa")
+
+    conexion = crear_conexion()
+    if not conexion:
+        QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
+        return
+
+    try:
+        cursor = conexion.cursor()
+
+        try:
+            cursor.execute("SELECT id, nombre FROM etapas")
+            etapas = cursor.fetchall()
+            if etapas:
+                dialogo.addetapa.clear()
+                for id, nombre in etapas:
+                    dialogo.addetapa.addItem(nombre, id)
+            else:
+                QMessageBox.warning(dialogo, "Advertencia", "No hay etapas disponibles.")
+        except Exception as e:
+            print(f"Error al cargar etapas: {e}")
+            QMessageBox.critical(dialogo, "Error", "No se pudieron cargar las etapas.")
+
+        try:
+            cursor.execute("SELECT id, nombre FROM recursos")
+            recursos = cursor.fetchall()
+            if recursos:
+                dialogo.addrecurso.clear()
+                for id, nombre in recursos:
+                    dialogo.addrecurso.addItem(nombre, id)
+            else:
+                QMessageBox.warning(dialogo, "Advertencia", "No hay recursos disponibles.")
+        except Exception as e:
+            print(f"Error al cargar recursos: {e}")
+            QMessageBox.critical(dialogo, "Error", "No se pudieron cargar los recursos.")
+
+    finally:
+        cursor.close()
+        conexion.close()
+
+    dialogo.addenviar.clicked.connect(dialogo.accept)
+
+    if dialogo.exec_() == QDialog.Accepted:
+        etapa_nombre = dialogo.addetapa.currentText()
+        etapa_id = dialogo.addetapa.currentData()
+        recurso_nombre = dialogo.addrecurso.currentText()
+        recurso_id = dialogo.addrecurso.currentData()
+
+        if not etapa_id or not recurso_id:
+            QMessageBox.warning(dialogo, "Advertencia", "Debe seleccionar una etapa y un recurso.")
+            return
+
+        conexion = crear_conexion()
+        if not conexion:
+            QMessageBox.critical(dialogo, "Error", "No se pudo conectar a la base de datos.")
+            return
+
+        try:
+            cursor = conexion.cursor()
+            sql_insert = "INSERT INTO se_asignan (id_recursos, id_etapas) VALUES (%s, %s)"
+            cursor.execute(sql_insert, (recurso_id, etapa_id))
+            conexion.commit()
+            QMessageBox.information(dialogo, "Éxito", f"Asignación añadida: {recurso_nombre} a {etapa_nombre}.")
+        except Exception as e:
+            print(f"Error al insertar en la base de datos: {e}")
+            QMessageBox.critical(dialogo, "Error", "No se pudo guardar la asignación.")
+        finally:
+            cursor.close()
+            conexion.close()
 
 def eliminar_gasto():
     global main_window
@@ -1341,10 +1437,6 @@ def inspeccionar_recursos():
     nombre = recurso.get("nombre", "Desconocido")
     tipo = recurso.get("tipo", "Desconocido")
 
-    if rol_actual == "user" and dni_actual != id:
-        QMessageBox.warning(main_window, "Permiso denegado", "Solo puedes inspeccionar tu propio perfil.")
-        return
-
     conexion = crear_conexion()
     if not conexion:
         QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
@@ -1355,13 +1447,25 @@ def inspeccionar_recursos():
         sql_select = "SELECT nombre, tipo, descripcion FROM recursos WHERE id = %s"
         cursor.execute(sql_select, (id,))
         resultado = cursor.fetchone()
+        sql_select_etapas = ("SELECT e.nombre FROM etapas AS e "
+                             "INNER JOIN se_asignan AS s ON s.id_etapas = e.id "
+                             "WHERE s.id_recursos = %s")
+        cursor.execute(sql_select_etapas, (id,))
+        resultado2 = cursor.fetchall()
 
         if not resultado:
             QMessageBox.warning(main_window, "Error", "No se encontraron datos del recurso en la base de datos.")
             return
 
+        if not resultado2:
+            QMessageBox.warning(main_window, "Error", "No se encontraron datos del recurso en la base de datos.")
+            return
+
         nombre, tipo, descripcion = resultado
         dialogo = QDialog()
+        nombres_etapas = [fila[0] for fila in resultado2]
+
+        nombres_etapas_str = ", ".join(nombres_etapas)
         try:
             loadUi("inspeccionar_recursos.ui", dialogo)
         except Exception as e:
@@ -1374,6 +1478,7 @@ def inspeccionar_recursos():
         dialogo.LNombre.setText(f"Nombre: {nombre}")
         dialogo.LTipo.setText(f"Tipo: {tipo}")
         dialogo.LDesc.setText(f"{descripcion}")
+        dialogo.LEtapas.setText(f"{nombres_etapas_str}")
 
         dialogo.exec_()
 
@@ -1452,13 +1557,25 @@ def inspeccionar_etapas():
                                 """)
                 cursor.execute(sql_select, (id,))
                 resultado = cursor.fetchone()
+                sql_select_recursos = ("SELECT r.nombre FROM recursos AS r "
+                                     "INNER JOIN se_asignan AS s ON s.id_recursos = r.id "
+                                     "WHERE s.id_etapas = %s")
+                cursor.execute(sql_select_recursos, (id,))
+                resultado2 = cursor.fetchall()
 
                 if not resultado:
                     QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
                     return
 
-                id, nombre, fecha_ini, fecha_fin, estado, nombre_proto = resultado
 
+                if not resultado2:
+                    QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
+                    return
+
+                id, nombre, fecha_ini, fecha_fin, estado, nombre_proto = resultado
+                nombres_recursos = [fila[0] for fila in resultado2]
+
+                nombres_recursos_str = ", ".join(nombres_recursos)
                 if nombre_proto == None:
                     relacion = "Prototipo no seleccionado"
 
@@ -1472,6 +1589,7 @@ def inspeccionar_etapas():
                 dialogo.Lfin.setText(f"Fecha fin: {fecha_fin}")
                 dialogo.Lestado.setText(f"Estado: {estado}")
                 dialogo.Lnombreproto.setText(f"Nombre prototipo: {nombre_proto}")
+                dialogo.LRecursos.setText(f"{nombres_recursos_str}")
                 dialogo.exec_()
 
             except Exception as e:
@@ -1598,6 +1716,7 @@ def abrir_ventana_etapas():
     configurar_ventana_etapas()
 
     header()
+    main_window.addRecur.clicked.connect(anadir_etapa_recurso)
     main_window.btnAddEtapas.clicked.connect(anadir_etapas)
     main_window.btnEditEtapas.clicked.connect(editar_etapas)
     main_window.btnDeleteEtapas.clicked.connect(eliminar_etapas)
@@ -1633,6 +1752,7 @@ def abrir_ventana_recursos():
     configurar_ventana_recursos()
 
     header()
+    main_window.addEtapa.clicked.connect(anadir_etapa_recurso)
     main_window.btnAddRecursos.clicked.connect(anadir_recursos)
     main_window.btnDeleteRecursos.clicked.connect(eliminar_recurso)
     main_window.btninspectRecursos.clicked.connect(inspeccionar_recursos)

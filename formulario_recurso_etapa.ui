@@ -90,7 +90,7 @@ QPushButton:disabled {
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="cetapa"/>
+      <widget class="QComboBox" name="addetapa"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="dNILabel">
@@ -103,12 +103,12 @@ QPushButton:disabled {
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="crecurso"/>
+      <widget class="QComboBox" name="addrecurso"/>
      </item>
      <item row="2" column="0" colspan="2">
       <widget class="QPushButton" name="addenviar">
        <property name="text">
-        <string>Registrar recurso</string>
+        <string>Registrar recurso/etapa</string>
        </property>
       </widget>
      </item>

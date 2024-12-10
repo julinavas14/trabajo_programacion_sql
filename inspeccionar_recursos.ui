@@ -50,29 +50,6 @@ text-align: center;
      </rect>
     </property>
     <layout class="QGridLayout" name="gridins">
-     <item row="4" column="0" colspan="2">
-      <widget class="QGroupBox" name="qdesc">
-       <property name="styleSheet">
-        <string notr="true">font-size: 15px;</string>
-       </property>
-       <property name="title">
-        <string>Descripción:</string>
-       </property>
-       <widget class="QLabel" name="LDesc">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>20</y>
-          <width>481</width>
-          <height>51</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-       </widget>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="LNombre">
        <property name="styleSheet">
@@ -94,6 +71,52 @@ font-size: 15px;</string>
        <property name="text">
         <string>Tipo:</string>
        </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QGroupBox" name="qdesc">
+       <property name="styleSheet">
+        <string notr="true">font-size: 15px;</string>
+       </property>
+       <property name="title">
+        <string>Descripción:</string>
+       </property>
+       <widget class="QLabel" name="LDesc">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>241</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="styleSheet">
+        <string notr="true">font-size: 15px;</string>
+       </property>
+       <property name="title">
+        <string>Etapas asignadas:</string>
+       </property>
+       <widget class="QLabel" name="LEtapas">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>30</y>
+          <width>231</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
       </widget>
      </item>
     </layout>

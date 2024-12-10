@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>634</width>
-    <height>419</height>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
      <x>90</x>
      <y>90</y>
      <width>471</width>
-     <height>291</height>
+     <height>331</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -75,7 +75,7 @@ QPushButton:disabled {
       <x>80</x>
       <y>60</y>
       <width>321</width>
-      <height>216</height>
+      <height>253</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -148,7 +148,7 @@ QPushButton:disabled {
        </property>
       </widget>
      </item>
-     <item row="5" column="0" colspan="2">
+     <item row="6" column="0" colspan="2">
       <widget class="QPushButton" name="addenviar">
        <property name="text">
         <string>Registrar etapa</string>
@@ -169,7 +169,7 @@ QPushButton:disabled {
        </item>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="protoripoLabel">
        <property name="styleSheet">
         <string notr="true">font-weight: bold;</string>
@@ -179,8 +179,21 @@ QPushButton:disabled {
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QComboBox" name="addproto"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">font-weight: bold;</string>
+       </property>
+       <property name="text">
+        <string>Recurso: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="addrecurso"/>
      </item>
     </layout>
    </widget>
