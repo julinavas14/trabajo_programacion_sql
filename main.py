@@ -1778,6 +1778,7 @@ def abrir_ventana_principal():
 
     main_window = QMainWindow()
     loadUi("V_E.ui", main_window)
+    main_window.setWindowTitle("Ventana Empleados")
 
     configurar_ventana_principal()
 
