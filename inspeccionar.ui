@@ -14,7 +14,8 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(58, 53, 47);</string>
+   <string notr="true">background-color: rgb(58, 53, 47);
+color: white;</string>
   </property>
   <widget class="QFrame" name="frame">
    <property name="geometry">
@@ -226,7 +227,8 @@ border-radius: 10px;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">font-size: 20px;
-border-color: transparent;</string>
+border-color: transparent;
+color: black;</string>
     </property>
     <property name="text">
      <string>Usuario seleccionado - </string>
