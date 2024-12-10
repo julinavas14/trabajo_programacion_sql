@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog, QVBoxLayout, QLabel,QComboBox, QDialogButtonBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
 from PyQt5.sip import delete
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
