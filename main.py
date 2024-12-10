@@ -1483,51 +1483,6 @@ def inspeccionar_etapas():
         else:
             QMessageBox.critical(main_window, "Error", "No se pudo conectar a la base de datos.")
 
-def anadir_etapa_recurso():
-    global main_window
-
-    dialogo = QDialog()
-    try:
-        loadUi("formulario_etapa_recurso.ui", dialogo)
-    except Exception as e:
-        print(f"Error al cargar el formulario: {e}")
-        QMessageBox.critical(main_window, "Error", "No se pudo cargar el formulario.")
-        return
-
-    dialogo.setWindowTitle("Asignar Recurso a Etapa")
-
-    conexion = crear_conexion()
-    if not conexion:
-        QMessageBox.critical(dialogo, "Error", "No se pudo conectar a la base de datos.")
-        return
-
-    try:
-        cursor = conexion.cursor()
-
-        cursor.execute("SELECT id, nombre FROM etapas")
-        etapas = cursor.fetchall()
-        dialogo.comboEtapas.clear()
-        for id_etapa, nombre_etapa in etapas:
-            dialogo.comboEtapas.addItem(nombre_etapa, id_etapa)
-
-        cursor.execute("SELECT id, nombre FROM recursos")
-        recursos = cursor.fetchall()
-        dialogo.comboRecursos.clear()
-        for id_recurso, nombre_recurso in recursos:
-            dialogo.comboRecursos.addItem(nombre_recurso, id_recurso)
-
-    except Exception as e:
-        print(f"Error al cargar datos de la base de datos: {e}")
-        QMessageBox.critical(dialogo, "Error", "No se pudieron cargar los datos.")
-        return
-    finally:
-        cursor.close()
-        conexion.close()
-
-    dialogo.btnEnviar.clicked.connect(lambda: guardar_asignacion(dialogo))
-
-    dialogo.exec_()
-
 def guardar_asignacion(dialogo):
     id_etapa = dialogo.comboEtapas.currentData()
     id_recurso = dialogo.comboRecursos.currentData()
@@ -1643,7 +1598,6 @@ def abrir_ventana_etapas():
     configurar_ventana_etapas()
 
     header()
-    main_window.btnRecur.clicked.connect(anadir_etapa_recurso)
     main_window.btnAddEtapas.clicked.connect(anadir_etapas)
     main_window.btnEditEtapas.clicked.connect(editar_etapas)
     main_window.btnDeleteEtapas.clicked.connect(eliminar_etapas)
