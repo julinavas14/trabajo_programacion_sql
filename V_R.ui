@@ -399,7 +399,8 @@ background-color: rgb(92, 73, 61);</string>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">    background-color: #e5f3ba;
+     <string notr="true">QPushButton{    
+	background-color: #e5f3ba;
     border: 2px solid rgb(192, 203, 155);
     border-radius: 12px;
     padding: 12px 20px;
@@ -408,7 +409,15 @@ background-color: rgb(92, 73, 61);</string>
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-	color:black;</string>
+	color:black;
+}
+
+QPushButton:hover {
+    background-color:  rgb(192, 203, 155);
+}
+QPushButton:pressed {
+    background-color: #e5f3ba;
+}</string>
     </property>
     <property name="text">
      <string>Asignar Etapa</string>
