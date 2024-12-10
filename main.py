@@ -1185,9 +1185,11 @@ def editar_etapas():
     if conexion:
         cursor = conexion.cursor()
         try:
-            sql_select = ("SELECT e.id, e.nombre, e.fecha_inicio, e.fecha_fin, e.estado, p.Nombre, e.id_protot "
+            sql_select = ("SELECT e.id, e.nombre, e.fecha_inicio, e.fecha_fin, e.estado, p.Nombre, e.id_protot, r.nombre "
                           "FROM etapas AS e "
                           "INNER JOIN prototipos AS p ON e.id_protot = p.id "
+                          "INNER JOIN se_asignan AS s ON e.id = s.id_etapas "
+                          "INNER JOIN recursos AS r ON r.id = s.id_recursos "
                           "WHERE e.id = %s")
             cursor.execute(sql_select, (id_etapa,))
             resultado = cursor.fetchone()
@@ -1196,7 +1198,7 @@ def editar_etapas():
                 QMessageBox.warning(main_window, "Error", "No se encontraron datos de la etapa en la base de datos.")
                 return
 
-            id, nombre_etapa, fecha_inicio, fecha_fin, estado, nombre_proto, id_proto = resultado
+            id, nombre_etapa, fecha_inicio, fecha_fin, estado, nombre_proto, id_proto, id_recurso = resultado
 
             fecha_inicio_str = fecha_inicio.strftime("%Y-%m-%d")
             fecha_fin_str = fecha_fin.strftime("%Y-%m-%d")
@@ -1212,14 +1214,24 @@ def editar_etapas():
             cursor.execute("SELECT id, Nombre FROM prototipos")
             resultados = cursor.fetchall()
 
+            cursor.execute("SELECT id, nombre FROM recursos")
+            resultados2 = cursor.fetchall()
+
             dialogo.addproto.clear()
             dialogo.addproto.addItem("Ninguno", None)
+            dialogo.addrecurso.clear()
             for id, nombre_rel in resultados:
                 dialogo.addproto.addItem(nombre_rel, id)
+            for id, nombre_rel in resultados2:
+                dialogo.addrecurso.addItem(nombre_rel, id)
 
             for i in range(dialogo.addproto.count()):
                 if dialogo.addproto.itemData(i) == id_proto:
                     dialogo.addproto.setCurrentIndex(i)
+                    break
+            for i in range(dialogo.addrecurso.count()):
+                if dialogo.addrecurso.itemData(i) == id_recurso:
+                    dialogo.addrecurso.setCurrentIndex(i)
                     break
 
             for i in range(dialogo.addestado.count()):
