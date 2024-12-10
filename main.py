@@ -6,6 +6,7 @@ from PyQt5 import QtCore
 import datetime
 from conexion import crear_conexion
 from PyQt5.QtCore import QDate
+from PyQt5.QtGui import QIcon
 
 
 usuarios = {
@@ -41,9 +42,16 @@ def header():
 def iniciar_sesion():
     global usuario_actual, rol_actual, main_window, login_window, dni_actual
 
+    try:
+        print("Verificando si el botón btnTogglePassword está en la interfaz...")
+        print(login_window.btnTogglePassword)
+    except AttributeError:
+        print("Error: No se encuentra el botón btnTogglePassword en la interfaz.")
+
+    login_window.btnTogglePassword.clicked.connect(mostrar_ocultar_contrasena)
+
     email = login_window.inputUsuario.text()
     dni = login_window.inputContrasena.text()
-
     conexion = crear_conexion()
     if conexion:
         try:
@@ -72,8 +80,10 @@ def iniciar_sesion():
         finally:
             cursor.close()
             conexion.close()
+
     else:
         login_window.labelError.setText("No se pudo conectar a la base de datos")
+
 
 def configurar_ventana_gastos():
     global main_window, rol_actual, gastos
@@ -1015,6 +1025,17 @@ def editar_gastos():
             cursor.close()
             conexion.close()
 
+def mostrar_ocultar_contrasena():
+    if login_window.inputContrasena.echoMode() == QLineEdit.Password:
+        print("aa")
+        login_window.inputContrasena.setEchoMode(QLineEdit.Normal)
+        #login_window.btnTogglePassword.setIcon(QIcon("imagenes/ojo.png"))
+    else:
+        login_window.inputContrasena.setEchoMode(QLineEdit.Password)
+        print("as")
+        #login_window.btnTogglePassword.setIcon(QIcon("imagenes/ss.png"))
+
+
 def editar_recursos():
     global main_window
 
@@ -1800,7 +1821,10 @@ def main():
     login_window = QDialog()
     loadUi("login.ui", login_window)
 
+
     login_window.btnLogin.clicked.connect(iniciar_sesion)
+
+
 
     if login_window.exec_() == QDialog.Accepted:
         sys.exit(app.exec_())

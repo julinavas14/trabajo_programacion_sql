@@ -77,9 +77,9 @@ border-color: transparent;</string>
    <widget class="QWidget" name="formLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
+      <x>30</x>
       <y>30</y>
-      <width>171</width>
+      <width>196</width>
       <height>193</height>
      </rect>
     </property>
@@ -150,6 +150,17 @@ border: none;</string>
        </property>
        <property name="text">
         <string>Login</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QPushButton" name="btnTogglePassword">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>imagenes/ss.png</normaloff>imagenes/ss.png</iconset>
        </property>
       </widget>
      </item>
