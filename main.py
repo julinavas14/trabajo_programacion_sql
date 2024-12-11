@@ -1,6 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog
-from PyQt5.sip import delete
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox, QDialog, QInputDialog, QLineEdit
 from PyQt5.uic import loadUi
 from PyQt5 import QtCore
 import datetime
@@ -41,14 +40,6 @@ def header():
 
 def iniciar_sesion():
     global usuario_actual, rol_actual, main_window, login_window, dni_actual
-
-    try:
-        print("Verificando si el botón btnTogglePassword está en la interfaz...")
-        print(login_window.btnTogglePassword)
-    except AttributeError:
-        print("Error: No se encuentra el botón btnTogglePassword en la interfaz.")
-
-    login_window.btnTogglePassword.clicked.connect(mostrar_ocultar_contrasena)
 
     email = login_window.inputUsuario.text()
     dni = login_window.inputContrasena.text()
@@ -1027,13 +1018,11 @@ def editar_gastos():
 
 def mostrar_ocultar_contrasena():
     if login_window.inputContrasena.echoMode() == QLineEdit.Password:
-        print("aa")
         login_window.inputContrasena.setEchoMode(QLineEdit.Normal)
-        #login_window.btnTogglePassword.setIcon(QIcon("imagenes/ojo.png"))
+        login_window.btnTogglePassword.setIcon(QIcon("imagenes/ojo.png"))
     else:
         login_window.inputContrasena.setEchoMode(QLineEdit.Password)
-        print("as")
-        #login_window.btnTogglePassword.setIcon(QIcon("imagenes/ss.png"))
+        login_window.btnTogglePassword.setIcon(QIcon("imagenes/ss.png"))
 
 
 def editar_recursos():
@@ -1816,6 +1805,7 @@ def abrir_ventana_principal():
 def main():
     global app, login_window
 
+
     app = QApplication(sys.argv)
     #app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     login_window = QDialog()
@@ -1824,8 +1814,12 @@ def main():
 
     login_window.btnLogin.clicked.connect(iniciar_sesion)
 
-
-
+    try:
+        print("Verificando si el botón btnTogglePassword está en la interfaz...")
+        print(login_window.btnTogglePassword)
+    except AttributeError:
+        print("Error: No se encuentra el botón btnTogglePassword en la interfaz.")
+    login_window.btnTogglePassword.clicked.connect(mostrar_ocultar_contrasena)
     if login_window.exec_() == QDialog.Accepted:
         sys.exit(app.exec_())
 
