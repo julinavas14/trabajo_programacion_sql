@@ -103,6 +103,14 @@ def configurar_ventana_gastos():
         finally:
             cursor.close()
             conexion.close()
+        if rol_actual == "admin":
+            main_window.btnAddGastos.setEnabled(True)
+            main_window.btnEditGastos.setEnabled(True)
+            main_window.btnDeleteGastos.setEnabled(True)
+        else:
+            main_window.btnAddGastos.setEnabled(False)
+            main_window.btnEditGastos.setEnabled(False)
+            main_window.btnDeleteGastos.setEnabled(False)
 
 def configurar_ventana_principal():
     global main_window, rol_actual, empleados
@@ -176,6 +184,15 @@ def configurar_ventana_etapas():
     except Exception as e:
         print(f"Error inesperado al configurar etapas: {e}")
 
+    if rol_actual == "admin":
+        main_window.btnAddEtapas.setEnabled(True)
+        main_window.btnEditEtapas.setEnabled(True)
+        main_window.btnDeleteEtapas.setEnabled(True)
+    else:
+        main_window.btnAddEtapas.setEnabled(False)
+        main_window.btnEditEtapas.setEnabled(False)
+        main_window.btnDeleteEtapas.setEnabled(False)
+
 def configurar_ventana_recursos():
     global main_window, rol_actual, recursos
 
@@ -210,6 +227,7 @@ def configurar_ventana_recursos():
     else:
         main_window.btnAddRecursos.setEnabled(False)
         main_window.btnDeleteRecursos.setEnabled(False)
+        main_window.btnEditRecursos.setEnabled(False)
 
 
 
@@ -248,6 +266,7 @@ def configurar_ventana_proto():
     else:
         main_window.btnAddProto.setEnabled(False)
         main_window.btnDeleteProto.setEnabled(False)
+        main_window.btnEditProto.setEnabled(False)
 
 def anadir_empleado():
     global main_window
