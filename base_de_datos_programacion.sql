@@ -89,3 +89,5 @@ create or replace table se_asignan(
 	constraint id_asignan_etapas foreign key(id_etapas)
 		references etapas(id)
 );
+
+alter table empleados modify DNI char(9) unique;
