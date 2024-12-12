@@ -77,7 +77,7 @@ create or replace TABLE recursos(
 	id int(3) auto_increment primary key,
 	nombre varchar(20),
 	descripcion varchar(50),
-	tipo varchar(20)
+	tipo varchar(20)	
 );
 
 create or replace table se_asignan(
@@ -90,4 +90,45 @@ create or replace table se_asignan(
 		references etapas(id)
 );
 
-alter table empleados modify DNI char(9) unique;
+INSERT INTO empleados (nombre, DNI, Email, Titulación, anos_experiencia, Tipo_via, Nombre_via, Codigo_Postal, Localidad, Provincia) 
+VALUES 
+('admin', 'admin','admin', 'admin', 9999 ),
+('Juan Pérez', '12345678A', 'juan.perez@example.com', 'Ingeniero Informático', 5, 'Calle', 'Gran Vía', '28013', 'Madrid', 'Madrid'),
+('Ana López', '87654321B', 'ana.lopez@example.com', 'Técnico en Redes', 3, 'Calle', 'Mayor', '08001', 'Barcelona', 'Barcelona'),
+('Carlos Ruiz', '11223344C', 'carlos.ruiz@example.com', 'Desarrollador Web', 7, 'Calle', 'Diagonal', '46001', 'Valencia', 'Valencia');
+
+INSERT INTO telf_empleados (id_empleado, telf) 
+VALUES 
+(1, '600123456'),
+(1, '600654321'),
+(2, '610987654');
+
+INSERT INTO prototipos (id_proto_rel, Nombre, Descripción, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est) 
+VALUES 
+(NULL, 'AppMovil', 'Desarrollo de una aplicación móvil', '2024-01-01', '2024-06-01', 10000.00, 200),
+(1, 'WebCorp', 'Diseño de una página corporativa', '2024-02-01', '2024-07-01', 15000.00, 300),
+(2, 'IoTProject', 'Implementación de IoT para hogares', '2024-03-01', '2024-09-01', 20000.00, 400);
+
+INSERT INTO gastos (id_emp, id_proto, Descripcion, Fecha, Importe, Tipo) 
+VALUES 
+(1, 1, 'Compra de software', '2024-01-15', 500.00, 'Licencia'),
+(2, 2, 'Adquisición de servidores', '2024-02-20', 1500.00, 'Hardware'),
+(3, 3, 'Gastos de publicidad', '2024-03-10', 200.00, 'Marketing');
+
+INSERT INTO etapas (nombre, fecha_inicio, fecha_fin, estado, id_protot) 
+VALUES 
+('Análisis', '2024-01-01', '2024-02-01', 'desarrollo', 1),
+('Diseño', '2024-02-02', '2024-03-01', 'desarrollo', 1),
+('Implementación', '2024-03-02', '2024-06-01', 'finalizada', 2);
+
+INSERT INTO recursos (nombre, descripcion, tipo) 
+VALUES 
+('Servidor AWS', 'Instancia EC2', 'Infraestructura'),
+('Laptop Dell', 'Portátil para desarrollo', 'Hardware'),
+('Licencia Figma', 'Software de diseño', 'Software');
+
+INSERT INTO se_asignan (id_recursos, id_etapas) 
+VALUES 
+(1, 1),
+(2, 2),
+(3, 3);
