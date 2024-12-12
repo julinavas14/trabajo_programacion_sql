@@ -356,6 +356,7 @@ def anadir_recursos():
                 finally:
                     cursor.close()
                     conexion.close()
+                abrir_ventana_recursos()
             else:
                 print("Error: No se pudo conectar a la base de datos.")
                 QMessageBox.critical(dialogo, "Error", "No se pudo conectar a la base de datos.")
@@ -433,7 +434,7 @@ def anadir_gastos():
                     conexion.close()
         except Exception as e:
             print(f"Error al procesar el formulario: {e}")
-
+    abrir_ventana_gastos()
 
 def anadir_proto():
     global main_window, protos
@@ -522,6 +523,7 @@ def anadir_proto():
                 finally:
                     cursor.close()
                     conexion.close()
+            abrir_ventana_proto()
         except Exception as e:
             print(f"Error al procesar los datos del formulario: {e}")
 
@@ -608,6 +610,7 @@ def anadir_etapas():
             finally:
                 cursor.close()
                 conexion.close()
+        abrir_ventana_etapas()
 
 def anadir_etapa_recurso():
     global main_window
@@ -990,6 +993,7 @@ def editar_gastos():
             dialogo.addimport.setValue(float(importe))
             dialogo.addtipo.setText(tipo)
             dialogo.adddesc.setPlainText(descripcion)
+            dialogo.addenviargastos.clicked.connect(dialogo.accept)
 
             if dialogo.exec_() == QDialog.Accepted:
                 nuevo_emp_id = dialogo.addempleado.currentData()
@@ -1826,7 +1830,6 @@ def main():
 
 
     app = QApplication(sys.argv)
-    #app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     login_window = QDialog()
     loadUi("login.ui", login_window)
 

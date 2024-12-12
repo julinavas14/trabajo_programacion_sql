@@ -173,6 +173,9 @@ QPushButton:disabled {
        <property name="styleSheet">
         <string notr="true">color: black;</string>
        </property>
+       <property name="minimum">
+        <number>30</number>
+       </property>
        <property name="maximum">
         <number>999999</number>
        </property>
