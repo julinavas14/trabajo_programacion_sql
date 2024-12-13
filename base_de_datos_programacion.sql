@@ -21,8 +21,8 @@ create or replace table empleados(
 create or replace table telf_empleados(
     id_empleado int,
     telf char(9),
-    primary key(id_emlpeado, telf),
-    foreign key id_emlpeado
+    primary key(id_empleado, telf),
+    foreign key id_empleado
         references empleados(ID)
         on delete cascade on update cascade
 );
