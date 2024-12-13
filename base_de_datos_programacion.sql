@@ -22,7 +22,7 @@ create or replace table telf_empleados(
     id_empleado int,
     telf char(9),
     primary key(id_empleado, telf),
-    foreign key id_empleado
+    foreign key (id_empleado)
         references empleados(ID)
         on delete cascade on update cascade
 );
@@ -92,7 +92,7 @@ create or replace table se_asignan(
 
 INSERT INTO empleados (nombre, DNI, Email, Titulacion, anos_experiencia, Tipo_via, Nombre_via, Codigo_Postal, Localidad, Provincia)
 VALUES 
-('admin', 'admin','admin', 'admin', 9999 ),
+('admin', 'admin','admin', 'admin', 9999, null, null, null, null, null ),
 ('Juan Pérez', '12345678A', 'juan.perez@example.com', 'Ingeniero Informático', 5, 'Calle', 'Gran Vía', '28013', 'Madrid', 'Madrid'),
 ('Ana López', '87654321B', 'ana.lopez@example.com', 'Técnico en Redes', 3, 'Calle', 'Mayor', '08001', 'Barcelona', 'Barcelona'),
 ('Carlos Ruiz', '11223344C', 'carlos.ruiz@example.com', 'Desarrollador Web', 7, 'Calle', 'Diagonal', '46001', 'Valencia', 'Valencia');
