@@ -90,7 +90,7 @@ create or replace table se_asignan(
 		references etapas(id)
 );
 
-INSERT INTO empleados (nombre, DNI, Email, Titulación, anos_experiencia, Tipo_via, Nombre_via, Codigo_Postal, Localidad, Provincia) 
+INSERT INTO empleados (nombre, DNI, Email, Titulacion, anos_experiencia, Tipo_via, Nombre_via, Codigo_Postal, Localidad, Provincia)
 VALUES 
 ('admin', 'admin','admin', 'admin', 9999 ),
 ('Juan Pérez', '12345678A', 'juan.perez@example.com', 'Ingeniero Informático', 5, 'Calle', 'Gran Vía', '28013', 'Madrid', 'Madrid'),
@@ -103,7 +103,7 @@ VALUES
 (1, '600654321'),
 (2, '610987654');
 
-INSERT INTO prototipos (id_proto_rel, Nombre, Descripción, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est) 
+INSERT INTO prototipos (id_proto_rel, Nombre, Descripcion, Fecha_inicio, Fecha_fin, Presupuesto, Horas_est)
 VALUES 
 (NULL, 'AppMovil', 'Desarrollo de una aplicación móvil', '2024-01-01', '2024-06-01', 10000.00, 200),
 (1, 'WebCorp', 'Diseño de una página corporativa', '2024-02-01', '2024-07-01', 15000.00, 300),
