@@ -283,7 +283,11 @@ def anadir_empleado():
         DNI = dialogo.addDNI.text().strip()
         puesto = dialogo.addtitulacion.text().strip()
         a_exp = dialogo.addanos.text().strip()
-
+        tipo = dialogo.addTipo.currentText()
+        nombe_via = dialogo.addnombrevia.text().strip()
+        cp = dialogo.addcodigopostal.text().strip()
+        localidad =dialogo.addlocalidad.text().strip()
+        provincia = dialogo.addprovincia.text().strip()
         if not nombre or not email or not DNI or not puesto:
             QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
             return
@@ -295,9 +299,10 @@ def anadir_empleado():
         if conexion:
             cursor = conexion.cursor()
             try:
-                sql_insert = ("INSERT INTO empleados (nombre, DNI, Email, Titulacion, anos_experiencia) "
-                              "VALUES (%s, %s, %s, %s, %s)")
-                cursor.execute(sql_insert, (nombre, DNI, email, puesto, a_exp))
+                sql_insert = ("INSERT INTO empleados (nombre, DNI, Email, Titulacion, anos_experiencia, Tipo_via, "
+                              "Nombre_via, Codigo_postal, Localidad, Provincia) "
+                              "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
+                cursor.execute(sql_insert, (nombre, DNI, email, puesto, a_exp, tipo, nombe_via, cp, localidad, provincia))
                 conexion.commit()
                 print(f"Empleado '{nombre}' añadido correctamente.")
             except Exception as e:
@@ -892,7 +897,10 @@ def editar_empleado():
         if conexion:
             cursor = conexion.cursor()
             try:
-                sql_select = "SELECT nombre, DNI, Email, Titulacion, anos_experiencia FROM empleados WHERE DNI = %s"
+                sql_select = ("SELECT nombre, DNI, Email, Titulacion, anos_experiencia, Tipo_via, "
+                              "Nombre_via, Codigo_postal, Localidad, Provincia "
+                              "FROM empleados "
+                              "WHERE DNI = %s")
                 cursor.execute(sql_select, (dni_empleado,))
                 resultado = cursor.fetchone()
 
@@ -900,13 +908,18 @@ def editar_empleado():
                     QMessageBox.warning(main_window, "Error", "No se encontraron datos del empleado en la base de datos.")
                     return
 
-                nombre, dni, email, titulacion, anos_experiencia = resultado
+                nombre, dni, email, titulacion, anos_experiencia,tipo, nombre_v, cp, loca, prov = resultado
 
                 dialogo = QDialog()
                 loadUi("formulario.ui", dialogo)
                 dialogo.setWindowTitle("Editar Empleado")
 
                 dialogo.addnombre.setText(nombre)
+                dialogo.addTipo.setCurrentText(tipo)
+                dialogo.addnombrevia.setText(nombre_v)
+                dialogo.addcodigopostal.setText(cp)
+                dialogo.addlocalidad.setText(loca)
+                dialogo.addprovincia.setText(prov)
                 dialogo.addemail.setText(email)
                 dialogo.addDNI.setText(dni)
                 dialogo.addtitulacion.setText(titulacion)
@@ -919,6 +932,11 @@ def editar_empleado():
                     nuevo_DNI = dialogo.addDNI.text().strip()
                     nueva_titulacion = dialogo.addtitulacion.text().strip()
                     nuevos_anos_experiencia = dialogo.addanos.text().strip()
+                    nuevo_tipo= dialogo.addTipo.itemText().strip()
+                    nuevo_nombre_v = dialogo.addnombrevia.text().strip()
+                    nuevo_cp = dialogo.addcodigopostal.text()
+                    nueva_loca = dialogo.addlocalidad.text().strip()
+                    prov= dialogo.addprovincia.text().strip()
 
                     if not nuevo_nombre or not nuevo_email or not nuevo_DNI or not nueva_titulacion or not nuevos_anos_experiencia:
                         QMessageBox.warning(dialogo, "Error", "Todos los campos son obligatorios.")
@@ -927,8 +945,11 @@ def editar_empleado():
                     empleados[current_item] = {"nombre": nuevo_nombre, "puesto": nueva_titulacion, "DNI": nuevo_DNI}
                     main_window.listEmpleados.item(current_item).setText(f"{nuevo_nombre} - {nueva_titulacion} - {nuevo_DNI}")
 
-                    sql_update = "UPDATE empleados SET nombre = %s, Email = %s, DNI = %s, Titulacion = %s, anos_experiencia = %s WHERE DNI = %s"
-                    cursor.execute(sql_update, (nuevo_nombre, nuevo_email, nuevo_DNI, nueva_titulacion, nuevos_anos_experiencia, dni_empleado))
+                    sql_update = ("UPDATE empleados SET nombre = %s, Email = %s, DNI = %s, Titulacion = %s, anos_experiencia = %s, "
+                                  "Tipo_via = %s, Codigo_postal = %s, Localidad = %s, Provincia = %s "
+                                  "WHERE DNI = %s")
+                    cursor.execute(sql_update, (nuevo_nombre, nuevo_email, nuevo_DNI, nueva_titulacion,
+                                                nuevos_anos_experiencia,nuevo_tipo,nuevo_cp,nueva_loca, prov, dni_empleado))
                     conexion.commit()
                     print(f"Empleado con DNI {dni_empleado} actualizado correctamente.")
             except Exception as e:
