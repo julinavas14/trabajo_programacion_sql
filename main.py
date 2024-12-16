@@ -932,7 +932,7 @@ def editar_empleado():
                     nuevo_DNI = dialogo.addDNI.text().strip()
                     nueva_titulacion = dialogo.addtitulacion.text().strip()
                     nuevos_anos_experiencia = dialogo.addanos.text().strip()
-                    nuevo_tipo= dialogo.addTipo.itemText().strip()
+                    nuevo_tipo = dialogo.addTipo.currentText().strip()
                     nuevo_nombre_v = dialogo.addnombrevia.text().strip()
                     nuevo_cp = dialogo.addcodigopostal.text()
                     nueva_loca = dialogo.addlocalidad.text().strip()
